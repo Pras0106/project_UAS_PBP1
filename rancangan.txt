@@ -9,7 +9,7 @@ Fitur:
 Page: 
 1. dashboard
 2. Shop
-3. detail Produk
+3. item (Detail Produk)
 4. Keranjang
 5. Riwayat
 6. detail akun
