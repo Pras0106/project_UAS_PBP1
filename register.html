@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Create Your Nike Account</title>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+    }
+
+    body, html {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: #000;
+    }
+
+    /* BACKGROUND SPLINE — menerima mouse */
+    .bg-spline {
+        position: fixed;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+        pointer-events: auto !important;
+    }
+
+    /* FORM WRAPPER — dilewati mouse kecuali form */
+    .form-wrapper {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        justify-content: center;
+        padding-top: 40px;
+        overflow-y: auto;
+        z-index: 10;
+        pointer-events: none;
+    }
+
+    /* FORM KONTAINER */
+    .form-box {
+        width: 420px;
+        background: white;
+        border-radius: 18px;
+        padding: 40px 32px;
+        margin-bottom: 60px;
+        box-shadow: 0 12px 40px rgba(0,0,0,0.25);
+        pointer-events: auto;
+    }
+
+    h1 {
+        font-size: 24px;
+        margin-bottom: 10px;
+        font-weight: bold;
+    }
+
+    input, select {
+        width: 100%;
+        padding: 12px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        margin-top: 10px;
+        font-size: 15px;
+    }
+
+    .input-row {
+        display: flex;
+        gap: 10px;
+    }
+
+    .checkbox-row {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        margin-top: 15px;
+        font-size: 14px;
+    }
+
+    .btn {
+        margin-top: 25px;
+        width: 100%;
+        background: #000;
+        color: white;
+        padding: 14px;
+        border-radius: 30px;
+        border: none;
+        font-weight: bold;
+        cursor: pointer;
+        font-size: 15px;
+    }
+
+    a { color: #0067ff; text-decoration: none; }
+</style>
+</head>
+
+<body>
+
+<!-- BACKGROUND SPLINE -->
+<div class="bg-spline">
+    <iframe 
+        src="https://my.spline.design/reactiveorb-E1QQSInSzvTUmAZo7dCLOVQ1/"
+        width="100%" height="100%" frameborder="0" style="border:0;">
+    </iframe>
+</div>
+
+<!-- FORM CONTENT -->
+<div class="form-wrapper">
+    <div class="form-box">
+
+        <img src="https://upload.wikimedia.org/wikipedia/commons/a/a6/Logo_NIKE.svg"
+             style="width: 60px; margin-bottom: 20px;">
+
+        <h1>Now let’s make you a Nike Member.</h1>
+
+        <p style="margin-bottom: 20px; font-size:14px;">
+            We've sent a code to<br>
+            <strong>your_email@example.com</strong> <a href="#">Edit</a>
+        </p>
+
+        <!-- CODE -->
+        <label>Code*</label>
+        <input type="text" placeholder="Enter Code" required>
+        <p style="color:red; font-size:12px;">Required</p>
+
+        <!-- NAME -->
+        <div class="input-row">
+            <div style="flex:1;">
+                <label>First Name*</label>
+                <input type="text" required>
+            </div>
+            <div style="flex:1;">
+                <label>Surname*</label>
+                <input type="text" required>
+            </div>
+        </div>
+
+        <!-- PASSWORD -->
+        <label>Password*</label>
+        <input type="password" required>
+        <p style="font-size:12px; margin-top:5px; line-height:1.4;">
+            ✕ Minimum of 8 characters<br>
+            ✕ Uppercase, lowercase letters and one number
+        </p>
+
+        <!-- SHOPPING PREFERENCE -->
+        <label style="margin-top:15px;">Shopping Preference*</label>
+        <select required>
+            <option value="">Select Option</option>
+            <option value="men">Men</option>
+            <option value="women">Women</option>
+        </select>
+
+        <!-- DATE OF BIRTH -->
+        <label style="margin-top:20px;">Date of Birth</label>
+        <div class="input-row">
+            <input type="number" placeholder="Day" min="1" max="31">
+            <input type="text" placeholder="Month">
+            <input type="number" placeholder="Year" min="1900" max="2025">
+        </div>
+
+        <p style="font-size:12px; margin-top:5px;">
+            Get a Nike Member Reward on your birthday.
+        </p>
+
+        <!-- CHECKBOXES -->
+        <div class="checkbox-row">
+            <input type="checkbox">
+            <label>Sign up for emails to get updates from Nike on products, offers and your Member benefits.</label>
+        </div>
+
+        <div class="checkbox-row">
+            <input type="checkbox">
+            <label>I agree to Nike’s <a href="#">Privacy Policy</a> and <a href="#">Terms of Use</a>.</label>
+        </div>
+
+        <!-- SUBMIT BUTTON -->
+        <button class="btn">Create Account</button>
+
+    </div>
+</div>
+
+</body>
+</html>
