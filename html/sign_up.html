@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,52 +15,46 @@
 
         body, html {
             width: 100%;
-            height: 100%;
-            overflow: hidden;
+            min-height: 100%;
+            overflow-y: auto; /* <-- allow scroll */
             background: #000;
         }
 
-        /* --- Spline background --- */
+        /* Spline background */
         .bg-spline {
             position: fixed;
             inset: 0;
             width: 100%;
             height: 100%;
-            pointer-events: auto;
             z-index: 0;
         }
 
-        /* --- Wrapper --- */
-        .register-wrapper {
-            position: fixed;
-            inset: 0;
+        /* SECTION WRAPPER */
+        .section {
+            position: relative;
+            width: 100%;
+            min-height: 100vh; /* Fullscreen height */
             display: flex;
             justify-content: flex-start;
             align-items: center;
             padding-left: 40px;
             z-index: 10;
-
-            /* agar spline tidak menghalangi */
             pointer-events: none;
         }
 
-        /* --- Box Form --- */
+        /* Form Box */
         .register-box {
             width: 340px;
             background: #fff;
             padding: 30px;
             border-radius: 12px;
             box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-            max-height: 95%;
-            overflow-y: auto;
-
-            /* FIX PENTING untuk drag */
             position: absolute;
+            z-index: 20;
             cursor: move;
             pointer-events: auto;
         }
 
-        /* Input style */
         .input-line {
             width: 100%;
             padding: 14px 10px;
@@ -71,7 +64,6 @@
             margin-bottom: 15px;
         }
 
-        /* Red button fix */
         .btn-create {
             width: 100%;
             background: #e53935;
@@ -83,11 +75,11 @@
             cursor: pointer;
             margin-bottom: 18px;
         }
+
         .btn-create:hover {
             background: #c62828;
         }
 
-        /* Google Button */
         .btn-google {
             width: 100%;
             border: 1px solid #ccc;
@@ -98,9 +90,9 @@
             justify-content: center;
             gap: 10px;
             cursor: pointer;
-            margin-bottom: 20px;
             background: white;
         }
+
         .btn-google:hover {
             background: #f5f5f5;
         }
@@ -108,76 +100,183 @@
         .google-icon {
             width: 20px;
         }
+
+        /* FOOTER (NOT FIXED) */
+        footer {
+            width: 100%;
+            background: #000;
+            color: #fff;
+            padding: 60px 80px 30px;
+            z-index: 20;
+            position: relative;
+        }
+
+        .footer-container {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        .footer-box h3 {
+            font-size: 18px;
+            margin-bottom: 14px;
+        }
+
+        .footer-box p,
+        .footer-box a {
+            font-size: 14px;
+            line-height: 1.8;
+            color: #ccc;
+            text-decoration: none;
+        }
+
+        .footer-box a:hover {
+            color: white;
+        }
+
+        .footer-input {
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            border: 1px solid #777;
+            border-radius: 6px;
+            overflow: hidden;
+            width: 220px;
+        }
+
+        .footer-input input {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            background: transparent;
+            outline: none;
+            color: white;
+        }
+
+        .footer-input button {
+            padding: 10px 14px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            color: white;
+        }
+
+        .copyright {
+            text-align: center;
+            margin-top: 30px;
+            color: #777;
+            font-size: 13px;
+            border-top: 1px solid #222;
+            padding-top: 12px;
+        }
+
     </style>
 </head>
 
 <body>
 
-    <!-- Spline -->
+    <!-- Spline Background -->
     <div class="bg-spline">
         <iframe src="https://my.spline.design/reactiveorb-E1QQSInSzvTUmAZo7dCLOVQ1/"
-                frameborder="0" width="100%" height="100%" style="border:0;">
-        </iframe>
+                frameborder="0" width="100%" height="100%" style="border:0;"></iframe>
     </div>
 
-    <!-- REGISTER UI -->
-    <div class="register-wrapper">
-        <div class="register-box" id="dragBox">
+    <!-- SECTION 1: FORM -->
+    <section class="section">
+        <div class="register-box">
 
             <h1 style="font-size: 24px; margin-bottom: 8px;">Create an account</h1>
             <p style="color:#666; margin-bottom: 22px;">Enter your details below</p>
 
-            <!-- Name -->
             <input type="text" placeholder="Name" class="input-line">
-
-            <!-- Email -->
             <input type="text" placeholder="Email or Phone Number" class="input-line">
-
-            <!-- Password -->
             <input type="password" placeholder="Password" class="input-line">
 
-            <!-- BUTTON CREATE ACCOUNT -->
             <button class="btn-create">Create Account</button>
 
-            <!-- BUTTON GOOGLE -->
             <button class="btn-google">
                 <img src="../image/google.png" class="google-icon">
                 <span>Sign up with Google</span>
             </button>
 
             <p style="text-align:center; margin-top: 10px;">
-                Already have account? 
+                Already have account?
                 <a href="#" style="font-weight:bold;">Log in</a>
             </p>
 
         </div>
-    </div>
+    </section>
+
+    <!-- SECTION 2: FOOTER -->
+    <footer>
+        <div class="footer-container">
+
+            <div class="footer-box">
+                <h3>NikeSignature</h3>
+                <p>Subscribe</p>
+                <p>Get 10% off your first order</p>
+                <div class="footer-input">
+                    <input type="text" placeholder="Enter your email">
+                    <button>➤</button>
+                </div>
+            </div>
+
+            <div class="footer-box">
+                <h3>Support</h3>
+                <p>111 Bijoy sarani, Dhaka,</p>
+                <p>DH 1515, Bangladesh.</p>
+                <p>exclusive@gmail.com</p>
+                <p>+88015-88888-9999</p>
+            </div>
+
+            <div class="footer-box">
+                <h3>Account</h3>
+                <p><a href="#">My Account</a></p>
+                <p><a href="#">Login / Register</a></p>
+                <p><a href="#">Cart</a></p>
+                <p><a href="#">Wishlist</a></p>
+                <p><a href="#">Shop</a></p>
+            </div>
+
+            <div class="footer-box">
+                <h3>Quick Link</h3>
+                <p><a href="#">Privacy Policy</a></p>
+                <p><a href="#">Terms Of Use</a></p>
+                <p><a href="#">FAQ</a></p>
+                <p><a href="#">Contact</a></p>
+            </div>
+
+        </div>
+
+        <div class="copyright">
+            © Copyright Rimel 2022. All rights reserved
+        </div>
+    </footer>
 
     <script>
-        /* --- Dragging --- */
-        const box = document.getElementById("dragBox");
+        const box = document.querySelector('.register-box');
         let drag = false;
         let offsetX = 0, offsetY = 0;
-
+    
         box.addEventListener("mousedown", (e) => {
             drag = true;
             offsetX = e.clientX - box.getBoundingClientRect().left;
             offsetY = e.clientY - box.getBoundingClientRect().top;
             box.style.cursor = "grabbing";
         });
-
+    
         document.addEventListener("mousemove", (e) => {
             if (drag) {
                 box.style.left = `${e.clientX - offsetX}px`;
                 box.style.top = `${e.clientY - offsetY}px`;
             }
         });
-
+    
         document.addEventListener("mouseup", () => {
             drag = false;
             box.style.cursor = "move";
         });
     </script>
-
+    
 </body>
 </html>
