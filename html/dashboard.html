@@ -1,1718 +1,398 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Nike - Demo Header & Feedback</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nike UI with Tailwind</title>
+
+    <!-- TAILWIND -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
     <style>
-        :root {
-            --accent: #111;
-            --muted: #666;
-            font-family: Inter, system-ui, Arial, sans-serif
-        }
-
-        body {
-            margin: 0;
-            color: #111
-        }
-
-        /* Utility bar */
-        .util {
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            padding: 8px 18px;
-            border-bottom: 1px solid #eee;
-            background: #a9a9a9
-        }
-
-        .util .left {
-            font-size: 14px;
-            color: var(--muted)
-        }
-
-        .util .right {
-            display: flex;
-            gap: 12px;
-            align-items: center
-        }
-
-        .btn {
-            background: transparent;
-            border: none;
-            padding: 6px 8px;
-            cursor: pointer;
-            font-size: 14px
-        }
-
-        .btn.link {
-            color: var(--muted)
-        }
-
-        .btn.primary {
-            background: #111;
-            color: #fff;
-            padding: 8px 12px;
-            border-radius: 18px
-        }
-
-        .main-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 10px 25px;
-        }
-
-        .main-nav {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-        }
-
-        .nav-left {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .nav-menu {
-            display: flex;
-            gap: 40px;
-            list-style: none;
-        }
-
-        .nav-link {
-            font-size: 16px;
-            color: black;
-            text-decoration: none;
-            padding-bottom: 4px;
-            font-weight: 500;
-            position: relative;
-            z-index: 30
-        }
-
-        /* Underline on Hover */
-        .nav-link:hover {
-            font-weight: 600;
-        }
-
-        .nav-link:hover::after {
-            width: 100%;
-        }
-
-        .nav-link::after {
-            content: "";
-            position: absolute;
-            left: 0;
-            bottom: -2px;
-            width: 0%;
-            height: 2px;
-            background: black;
-            transition: width .25s ease;
-            z-index: 30
-        }
-
-        /* DROPDOWN CONTAINER */
-        .dropdown-mega {
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100%;
-            max-width: 1200px;
-            /* batasi lebar dropdown */
-            background: white;
-            padding: 25px 40px;
-            display: none;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 20px;
-            border-bottom: 1px solid #ddd;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            z-index: 20;
-        }
-
-
-        /* Show on hover */
-        .nav-item.has-dropdown:hover .dropdown-mega {
-            display: grid;
-        }
-
-        /* COLUMN STYLE */
-        .mega-col {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .mega-title {
-            font-weight: 700;
-            margin-bottom: 10px;
-            font-size: 17px;
-        }
-
-        .dropdown-mega a {
-            font-size: 14px;
-            color: #444;
-            text-decoration: none;
-        }
-
-        .dropdown-mega a:hover {
-            color: black;
-        }
-
-        .nav-left {
-            display: flex;
-            flex-direction: column;
-            /* supaya nike di bawah player */
-            align-items: flex-start;
-            margin-top: -45px;
-            /* naikkan posisi agar sejajar dengan Find a Store */
-        }
-
-        /* Ukuran logo player */
-        .logo-player img {
-            width: 55px;
-            height: auto;
-        }
-
-        /* Ukuran logo nike */
-        .logo-nike img {
-            width: 80px;
-            margin-top: 10px;
-            /* memberi jarak dari logo player */
-        }
-
-        /* Kontainer ikon kanan */
-        .nav-right {
-            display: flex;
-            gap: 20px;
-            align-items: center;
-        }
-
-        .nav-left a img {
-            width: 35px;
-            display: block;
-            margin-bottom: 8px;
-        }
-
-        .find-store {
-            font-size: 12px;
-            margin-right: 15px;
-            position: relative;
-            top: -5px;
-        }
-
-        .icon-btn {
-            background: none;
-            border: none;
-            cursor: pointer;
-            margin-left: 12px;
-        }
-
-        .icon-btn img {
-            width: 22px;
-        }
-
-        /* Search Overlay */
-        .search-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100vh;
-            background: rgba(255, 255, 255, 0.95);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-
-        .search-overlay.hidden {
-            display: none;
-        }
-
-
-        .search-box {
-            width: 80%;
-            max-width: 450px;
-            display: flex;
-            align-items: center;
-            border-bottom: 2px solid #000;
-            padding-bottom: 8px;
-        }
-
-
-        .search-box input {
-            flex: 1;
-            border: none;
-            outline: none;
-            font-size: 18px;
-            background: none;
-        }
-
-
-        .cancel-btn {
-            margin-left: 15px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        /* user dropdown */
-        .user {
-            position: relative
-        }
-
-        .user-btn {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            border-radius: 18px;
-            padding: 6px 10px;
-            border: 1px solid #e6e6e6;
-            cursor: pointer
-        }
-
-        .user-btn img {
-            width: 26px;
-            height: 26px;
-            border-radius: 50%
-        }
-
-        .dropdown {
-            position: absolute;
-            right: 0;
-            top: calc(100% + 8px);
-            min-width: 220px;
-            background: #fff;
-            border: 1px solid #eaeaea;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, .06);
-            display: none
-        }
-
-        .dropdown.show {
-            display: block
-        }
-
-        .dropdown .title {
-            font-weight: 700;
-            padding: 10px 12px;
-            border-bottom: 1px solid #f3f3f3
-        }
-
-        .dropdown a {
-            display: block;
-            padding: 8px 12px;
-            color: #222;
-            text-decoration: none
-        }
-
-        .dropdown a.small {
-            font-weight: 400;
-            color: var(--muted);
-            font-size: 13px
-        }
-
-        /* help overlay */
-        .help-wrap {
-            position: relative
-        }
-
-        .help-panel {
-            position: absolute;
-            right: 0;
-            top: calc(100% + 8px);
-            min-width: 260px;
-            background: #fff;
-            border: 1px solid #eaeaea;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, .06);
-            display: none
-        }
-
-        .help-panel.show {
-            display: block
-        }
-
-        .help-panel .title {
-            font-weight: 700;
-            padding: 10px 12px;
-            border-bottom: 1px solid #f3f3f3
-        }
-
-        .help-panel a {
-            display: block;
-            padding: 8px 12px;
-            color: #222;
-            text-decoration: none
-        }
-
-        /* hero */
-        .hero {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 420px;
-            background: #f7f7f7
-        }
-
-        .hero img {
-            max-height: 380px;
-            object-fit: cover
-        }
-
-        /* content placeholder */
-        .container {
-            max-width: 1100px;
-            margin: 28px auto;
-            padding: 0 18px
-        }
-
-        /* modal */
-        .modal-backdrop {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, .5);
-            display: none;
-            align-items: center;
-            justify-content: center
-        }
-
-        .modal-backdrop.show {
-            display: flex
-        }
-
-        .modal {
-            width: 760px;
-            background: #fff;
-            border-radius: 8px;
-            overflow: auto;
-            max-height: 80vh
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 16px;
-            border-bottom: 1px solid #eee
-        }
-
-        .modal-body {
-            padding: 16px
-        }
-
-        .form-row {
-            margin: 12px 0
-        }
-
-        label {
-            display: block;
-            margin-bottom: 6px;
-            font-weight: 600
-        }
-
-        select,
-        input[type=text],
-        textarea {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 6px
-        }
-
-        .small {
-            font-weight: 400;
-            color: var(--muted);
-            font-size: 14px
-        }
-
-        .star-row {
-            display: flex;
-            gap: 10px;
-            margin-top: 8px
-        }
-
-        .star {
-            width: 40px;
-            height: 40px;
-            border: 2px solid #ccc;
-            border-radius: 8px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            transition: 0.25s;
-        }
-
-        .star.selected {
-            background-color: #ffd54f;
-            /* kuning */
-            border-color: #ffb300;
-        }
-
-        .radio-scale {
-            display: flex;
-            align-items: center;
-            gap: 25px;
-            margin: 20px 0;
-        }
-
-        .radio-scale .small {
-            font-size: 12px;
-            color: #555;
-            width: 90px;
-            text-align: center;
-        }
-
-        .radio-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            cursor: pointer;
-            user-select: none;
-        }
-
-        .radio-item input[type="radio"] {
-            display: none;
-            /* hide default radio */
-        }
-
-        /* outer circle */
-        .radio-item .circle {
-            width: 22px;
-            height: 22px;
-            border: 2px solid #6e6e6e;
-            border-radius: 50%;
-            position: relative;
-            transition: border-color 0.2s ease;
-        }
-
-        /* inner filled circle (appears when selected) */
-        .radio-item .circle::after {
-            content: "";
-            width: 12px;
-            height: 12px;
-            background: #0a66ff;
-            /* blue like Google Forms */
-            border-radius: 50%;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            opacity: 0;
-            transition: opacity 0.2s ease;
-        }
-
-        /* selected state */
-        .radio-item input[type="radio"]:checked+.circle {
-            border-color: #0a66ff;
-        }
-
-        .radio-item input[type="radio"]:checked+.circle::after {
-            opacity: 1;
-        }
-
-        .label-number {
-            margin-top: 5px;
-            font-size: 14px;
-            color: #333;
-        }
-
-        .radio-scale input {
-            appearance: none;
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            border: 1px solid #ccc
-        }
-
-        .actions {
-            display: flex;
-            justify-content: flex-end;
-            gap: 8px;
-            padding: 12px 16px;
-            border-top: 1px solid #eee
-        }
-
-        .hidden {
-            display: none
-        }
-
-        .error {
-            color: #c00;
-            font-weight: 700;
-            margin-top: 6px
-        }
-
-        .app-cards {
-            display: flex;
-            gap: 10px
-        }
-
-        .app-card {
-            flex: 1;
-            border: 1px solid #eee;
-            border-radius: 8px;
-            padding: 8px;
-            display: flex;
-            gap: 8px;
-            align-items: center
-        }
-
-        .app-card img {
-            width: 38px;
-            height: 38px
-        }
-
-        a.navlink {
-            color: var(--muted);
-            text-decoration: none
-        }
-
-        @media (max-width:800px) {
-            .modal {
-                width: 94%
-            }
-        }
-
-        /* posisi panel */
-        .help-wrapper {
-            position: relative;
-            /* penting agar panel nempel ke wrapper */
-            display: inline-block;
-        }
-
-        .help-panel {
-            position: absolute;
-            top: 40px;
-            /* sesuaikan dengan tinggi navbar */
-            right: 0;
-            /* <=== inilah yang membuat panel berada dekat tombol Help */
-            background: #fff;
-            border: 1px solid #ddd;
-            width: 240px;
-            padding: 15px;
-            opacity: 0;
-            display: none;
-            transform: translateY(-10px);
-            transition: opacity .25s ease, transform .25s ease;
-            z-index: 999;
-        }
-
-        .help-panel.show {
-            display: block;
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .hero-banner {
-            position: relative;
-            width: 100%;
-            height: 90vh;
-            /* Bisa disesuaikan */
-            overflow: hidden;
-        }
-
-        .spline-wrapper {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
-
-        .hero-text {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-
-            color: #000;
-            font-size: 2.2rem;
-            font-weight: 600;
-            text-align: center;
-            z-index: 10;
-
-            background: rgba(255, 255, 255, 0.6);
-            backdrop-filter: blur(6px);
-            padding: 14px 30px;
-            border-radius: 10px;
-        }
-
-        /* Mobile responsive */
-        @media (max-width: 768px) {
-            .hero-text {
-                font-size: 1.3rem;
-                width: 80%;
-            }
-        }
-
-        .gift-sport-section {
-            padding: 40px 20px;
-            text-align: center;
-        }
-
-        .gift-sport-section h2 {
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
-
-        .sport-carousel-container {
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .sport-carousel {
-            display: flex;
-            gap: 15px;
-            overflow-x: auto;
-            scroll-behavior: smooth;
-            padding: 15px;
-            scrollbar-width: none;
-        }
-
-        .sport-carousel::-webkit-scrollbar {
-            display: none;
-        }
-
-        .sport-item {
-            min-width: 538px;
-            cursor: pointer;
-            transition: transform 0.3s;
-        }
-
-        .sport-item img {
-            width: 538px;
-            height: 670px;
-            border-radius: 8px;
-            object-fit: cover;
-        }
-
-        .sport-item p {
-            margin-top: 8px;
-            font-size: 14px;
-            font-weight: 500;
-        }
-
-        .sport-item:hover {
-            transform: scale(1.05);
-        }
-
-        .carousel-btn {
-            position: absolute;
-            background: black;
-            color: white;
-            border: none;
-            font-size: 22px;
-            padding: 10px 15px;
-            cursor: pointer;
-            z-index: 5;
-            border-radius: 50%;
-            opacity: 0.8;
-            transition: .2s;
-        }
-
-        .carousel-btn:hover {
-            opacity: 1;
-        }
-
-        .left-btn {
-            left: 0;
-        }
-
-        .right-btn {
-            right: 0;
+        /* shadow dropdown */
+        .dropdown-shadow {
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
         }
     </style>
 </head>
 
-<body>
-    <div class="util" style="background-color: #ccc;">
-        <div class="right">
-            <div class="help-wrap">
-                <button class="btn link" id="findStore" style="color: black;">Find a Store</button>
+<body class="bg-white text-black">
 
-                <div class="help-wrapper">
-                    <button class="btn link" id="helpBtn" style="color: black;">Help ▾</button>
-
-                    <div class="help-panel" id="helpPanel" role="menu" aria-hidden="true">
-                        <div class="title">Help</div>
-                        <a href="details-order.html">Orders Status</a>
-                        <a href="shipping-delivery.html">Dispatch Delivery</a>
-                        <a href="returns-policy.html">Returns</a>
-                        <a href="contact.html">Contact Us</a>
-                        <a href="agreement.html">Privacy Policy</a>
-                        <a href="terms-of-sale.html">Terms of Sale</a>
-                        <a href="terms-of-use.html">Terms of Use</a>
-                        <a href="#" id="sendFeedbackTrigger">Send Us Feedback</a>
-                    </div>
-                </div>
-
-            </div>
-
-            <button class="btn link" id="joinBtn" style="color: black;">Join Us</button>
-            <button class="btn link" id="signInBtn" style="color: black;">Sign In</button>
-
-            <!-- user placeholder (hidden by default) -->
-            <div class="user hidden" id="userWrap">
-                <div class="user-btn" id="userBtn"><span id="userGreeting">Hi, User</span><img src="../image/user.png"
-                        alt="user" /></div>
-                <div class="dropdown" id="userDropdown" role="menu" aria-hidden="true">
-                    <div class="title">Account</div>
-                    <a href="profile.html">Profile</a>
-                    <a href="orders.html" class="small">Orders</a>
-                    <a href="favourites.html" class="small">Favourite</a>
-                    <a href="experiences.html" class="small">Experience</a>
-                    <a href="settings.html" class="small">Account Settings</a>
-                    <a href="#" id="logoutBtn" class="small">Log Out</a>
-                </div>
+    <!-- TOP UTILITY BAR -->
+    <div class="w-full bg-black text-white text-sm py-2">
+        <div class="max-w-7xl mx-auto flex justify-between px-4">
+            <div></div>
+            <div class="flex gap-6">
+                <a href="#" class="hover:underline">Find a Store</a>
+                <a href="#" class="hover:underline">Help</a>
+                <a href="#" class="hover:underline">Join Us</a>
+                <a href="#" class="hover:underline">Sign In</a>
             </div>
         </div>
     </div>
 
-    <header class="main-header">
-        <div class="nav-left">
-            <a href="jordan.html" class="logo-player">
-                <img src="../image/player.png" alt="Player Logo""/>
-            </a>
+    <!-- MAIN HEADER -->
+    <header class="w-full border-b bg-white">
+        <div class="max-w-7xl mx-auto flex items-center justify-between py-4 px-4">
 
-            <a href="index.html" class="logo-nike">
-                <img src="../image/nike.png" alt="Nike Logo" />
-            </a>
-        </div>
+            <!-- LEFT (menu) -->
+            <nav class="flex items-center gap-10 font-medium text-lg">
 
-        <nav class="main-nav" style="flex: 1; display: flex; justify-content: center;">
-            <ul class="nav-menu" style="background-color: #ccc;">
-                <li class="nav-item has-dropdown">
-                    <a href="#" class="nav-link">New & Featured</a>
+                <!-- NEW & FEATURED (with dropdown) -->
+                <div class="relative group">
+                    <button class="font-bold hover:underline">New & Featured</button>
 
                     <!-- DROPDOWN -->
-                    <div class="dropdown-mega">
+                    <div
+                        class="absolute left-0 top-full hidden group-hover:flex bg-white p-6 gap-16 dropdown-shadow z-50">
 
-                        <!-- 1 COLUMN — FEATURED -->
-                        <div class="mega-col">
-                            <div class="mega-title">Featured</div>
-                            <a href="all_products.html?filter=New%20&%20Upcoming%20Drops">New & Upcoming Drops</a>
-                            <a href="all_products.html?filter=New%20Arrivals">New Arrivals</a>
-                            <a href="all_products.html?filter=Bestseller">Bestsellers</a>
-                            <a href="all_products.html?filter=SNKRS%20Launch%20Calendar">SNKRS Launch Calendar</a>
-                            <a href="all_products.html?filter=Customize%20with%20Nike%20By%20You">Customize with Nike By
-                                You</a>
-                            <a href="all_products.html?filter=Jordan">Jordan</a>
-                            <a href="all_products.html?filter=LebronJames">LeBron James</a>
+                        <!-- FEATURED -->
+                        <div>
+                            <h3 class="font-bold text-lg mb-2">Featured</h3>
+                            <div class="flex flex-col gap-1 text-gray-700">
+
+                                <a href="all_products.html?filter=New%20&%20Upcoming%20Drops" class="hover:underline">
+                                    New & Upcoming Drops
+                                </a>
+                                <a href="all_products.html?filter=New%20Arrivals" class="hover:underline">
+                                    New Arrivals
+                                </a>
+                                <a href="all_products.html?filter=Bestseller" class="hover:underline">
+                                    Bestseller
+                                </a>
+                                <a href="all_products.html?filter=SNKRS%20Launch%20Calendar" class="hover:underline">
+                                    SNKRS Launch Calendar
+                                </a>
+                                <a href="all_products.html?filter=Customize%20with%20Nike%20by%20You"
+                                    class="hover:underline">
+                                    Customize with Nike by You
+                                </a>
+                                <a href="all_products.html?filter=Jordan" class="hover:underline">
+                                    Jordan
+                                </a>
+                                <a href="all_products.html?filter=LebronJames" class="hover:underline">
+                                    LebronJames
+                                </a>
+                            </div>
                         </div>
 
-                        <!-- 2 COLUMN — TRENDING -->
-                        <div class="mega-col">
-                            <div class="mega-title">Trending</div>
-                            <a href="all_products.html?filter=More%20Color%20More%20Running">More Color More Running</a>
-                            <a href="all_products.html?filter=Vomero%20Premium">Vomero Premium</a>
-                            <a href="all_products.html?filter=What's%20Trending">What's Trending</a>
-                            <a href="all_products.html?filter=24.7%20Collection">24.7 Collection</a>
-                            <a href="all_products.html?filter=Colours%20of%20Season">Colours of Season</a>
-                            <a href="all_products.html?filter=Retro%20Running">Retro Running</a>
+                        <!-- TRENDING -->
+                        <div>
+                            <h3 class="font-bold text-lg mb-2">Trending</h3>
+                            <div class="flex flex-col gap-1 text-gray-700">
+                                <a href="all_products.html?filter=More%20Color%20More%20Running"
+                                    class="hover:underline">More Color More Running</a>
+                                <a href="all_products.html?filter=Vomero%20Premium" class="hover:underline">Vomero
+                                    Premium</a>
+                                <a href="all_products.html?filter=What's%20Trending" class="hover:underline">What's
+                                    Trending</a>
+                                <a href="all_products.html?filter=24.7%20Collection" class="hover:underline">24.7
+                                    Collection</a>
+                                <a href="all_products.html?filter=Colours%20of%20Season" class="hover:underline">Colours
+                                    of Season</a>
+                                <a href="all_products.html?filter=Retro%20Running" class="hover:underline">Retro
+                                    Running</a>
+                            </div>
                         </div>
 
-                        <!-- 3 COLUMN — SHOP ICONS -->
-                        <div class="mega-col">
-                            <div class="mega-title">Shop Icons</div>
-                            <a href="all_products.html?filter=Air%20Force%201%20Shoes">Air Force 1</a>
-                            <a href="all_products.html?filter=Air%20Jordan%201%20Shoes">Air Jordan 1</a>
-                            <a href="all_products.html?filter=Air%20Max%20Shoes">Air Max</a>
-                            <a href="all_products.html?filter=Dunk%20Shoes">Dunk</a>
-                            <a href="all_products.html?filter=Cortez%20Shoes">Cortez</a>
-                            <a href="all_products.html?filter=Blazer%20Shoes">Blazer</a>
-                            <a href="all_products.html?filter=Nike%20Pegasus%20Shoes">Pegasus</a>
-                            <a href="all_products.html?filter=Nike%20Vomero%20Shoes">Vomero</a>
+                        <!-- SHOP ICONS -->
+                        <div>
+                            <h3 class="font-bold text-lg mb-2">Shop Icons</h3>
+                            <div class="flex flex-col gap-1 text-gray-700">
+                                <a href="all_products.html?filter=Air%20Force%201%20Shoes" class="hover:underline">Air
+                                    Force 1</a>
+                                <a href="all_products.html?filter=Air%20Jordan%201%20Shoes" class="hover:underline">Air
+                                    Jordan 1</a>
+                                <a href="all_products.html?filter=Air%20Max%20Shoes" class="hover:underline">Air Max</a>
+                                <a href="all_products.html?filter=Dunk%20Shoes" class="hover:underline">Dunk</a>
+                                <a href="all_products.html?filter=Cortez%20Shoes" class="hover:underline">Cortez</a>
+                                <a href="all_products.html?filter=Blazer%20Shoes" class="hover:underline">Blazer</a>
+                                <a href="all_products.html?filter=Nike%20Pegasus%20Shoes"
+                                    class="hover:underline">Pegasus</a>
+                                <a href="all_products.html?filter=Nike%20Vomero%20Shoes"
+                                    class="hover:underline">Vomero</a>
+                            </div>
                         </div>
 
-                        <!-- 4 COLUMN — SHOP BY SPORT -->
-                        <div class="mega-col">
-                            <div class="mega-title">Shop By Sport</div>
-                            <a href="running.html">Running</a>
-                            <a href="basketball.html">Basketball</a>
-                            <a href="football.html">Football</a>
-                            <a href="golf.html">Golf</a>
-                            <a href="tennis.html">Tennis</a>
-                            <a href="training.html">Gym and Training</a>
-                            <a href="yoga.html">Yoga</a>
-                            <a href="skateboarding.html">Skateboarding</a>
-                        </div>
-
-                    </div>
-                </li>
-
-                <li class="nav-item has-dropdown">
-                    <a href="men.html" class="nav-link">Men</a>
-
-                    <div class="dropdown-mega">
-
-                        <!-- 1. FEATURED -->
-                        <div class="mega-col">
-                            <div class="mega-title">Featured</div>
-
-                            <a href="all_products.html?filter=New%20Men's">New Arrivals</a>
-                            <a href="all_products.html?filter=Men's%20Bestsellers">Bestseller</a>
-                            <a href="all_products.html?filter=Men's%20Sale">Shop All Sale</a>
-                        </div>
-
-                        <!-- 2. SHOES -->
-                        <div class="mega-col">
-                            <div class="mega-title" onclick="location.href='all_products.html?filter=Men%27s%20Shoes'">
-                                Shoes</div>
-
-                            <a href="all_products.html?filter=Men's%20Shoes">All Shoes</a>
-                            <a href="all_products.html?filter=Men's%20Lifestyle%20Shoes">Lifestyle</a>
-                            <a href="all_products.html?filter=Men's%20Jordan%20Shoes">Jordan</a>
-                            <a href="all_products.html?filter=Men's%20Running%20Shoes">Running</a>
-                            <a href="all_products.html?filter=Men's%20Football%20Shoes">Football</a>
-                            <a href="all_products.html?filter=Men's%20Basketball%20Shoes">Basketball</a>
-                            <a href="all_products.html?filter=Men's%20Training%20&%20Gym%20Shoes">Gym & Training</a>
-                            <a href="all_products.html?filter=Men's%20Tennis%20Shoes">Tennis</a>
-                            <a href="all_products.html?filter=Men's%20Skate%20Shoes">Skateboarding</a>
-                            <a href="all_products.html?filter=Men's%20Sandals%20&%20Shoes">Sandals & Slides</a>
-                            <a href="all_products.html?filter=Men's%20Nike%20By%20You%20Shoes">Nike By You</a>
-                        </div>
-
-                        <!-- 3. CLOTHING -->
-                        <div class="mega-col">
-                            <div class="mega-title"
-                                onclick="location.href='all_products.html?filter=Men%27s%20Clothing'">
-                                Clothing</div>
-
-                            <a href="all_products.html?filter=Men's%20Clothing">All Clothing</a>
-                            <a href="all_products.html?filter=Men's%20Tops%20&%20T-Shirts">Tops & T-Shirts</a>
-                            <a href="all_products.html?filter=Men's%20Shorts">Shorts</a>
-                            <a href="all_products.html?filter=Men's%20Pants%20&%20Leggings">Pants & Leggings</a>
-                            <a href="all_products.html?filter=Men's%20Hoodies%20&%20Sweatshirts">Hoodies &
-                                Sweatshirts</a>
-                            <a href="all_products.html?filter=Men's%20Jackets%20&%20Gillets">Jackets & Gillets</a>
-                            <a href="all_products.html?filter=Men's%20Jerseys%20&%20Kits">Jerseys & Kits</a>
-                            <a href="all_products.html?filter=Men's%20Jordan%20Clothing">Jordan</a>
-                        </div>
-
-                        <!-- 4. SHOP BY SPORT -->
-                        <div class="mega-col">
-                            <div class="mega-title">Shop By Sport</div>
-
-                            <a href="all_products.html?filter=Men's%20Running">Running</a>
-                            <a href="all_products.html?filter=Men's%20Basketball">Basketball</a>
-                            <a href="all_products.html?filter=Men's%20Football">Football</a>
-                            <a href="all_products.html?filter=Men's%20Golf">Golf</a>
-                            <a href="all_products.html?filter=Men's%20Tennis%20&%20Pickleball">Tennis & Pickleball</a>
-                            <a href="all_products.html?filter=Men's%20Training%20&%20Gym">Gym and Training</a>
-                            <a href="all_products.html?filter=Men's%20Yoga">Yoga</a>
-                            <a href="all_products.html?filter=Men's%20Skateboarding">Skateboarding</a>
-                        </div>
-
-                        <!-- 5. ACCESSORIES & EQUIPMENT -->
-                        <div class="mega-col">
-                            <div class="mega-title">Accessories & Equipment</div>
-
-                            <a href="all_products.html?filter=Men's%20Accessories%20&%20Equipment">All Accessories &
-                                Equipment</a>
-                            <a href="all_products.html?filter=Men's%20Bags%20&%20Backpacks">Bags & Backpacks</a>
-                            <a href="all_products.html?filter=Men's%20Socks">Socks</a>
-                            <a href="all_products.html?filter=Men's%20Hats%20&%20Headwear">Hats & Headwear</a>
+                        <!-- SHOP BY SPORT -->
+                        <div>
+                            <h3 class="font-bold text-lg mb-2">Shop By Sport</h3>
+                            <div class="flex flex-col gap-1 text-gray-700">
+                                <a href="running.html" class="hover:underline">Running</a>
+                                <a href="basketball.html" class="hover:underline">Basketball</a>
+                                <a href="football.html" class="hover:underline">Football</a>
+                                <a href="golf.html" class="hover:underline">Golf</a>
+                                <a href="tennis.html" class="hover:underline">Tennis</a>
+                                <a href="training.html" class="hover:underline">Gym and Training</a>
+                                <a href="yoga.html" class="hover:underline">Yoga</a>
+                                <a href="skateboarding.html" class="hover:underline">Skateboarding</a>
+                            </div>
                         </div>
 
                     </div>
-                </li>
+                </div>
 
-                <li class="nav-item has-dropdown">
-                    <a href="women.html" class="nav-link">Women</a>
+                <!-- MENU: MEN -->
+                <div class="relative group">
+                    <!-- BUTTON MEN -->
+                    <a href="men.html" class="font-bold group-hover:underline">
+                        Men
+                    </a>
 
-                    <div class="dropdown-mega">
+                    <!-- DROPDOWN -->
+                    <div
+                        class="absolute left-0 top-full hidden group-hover:flex bg-white p-6 gap-16 dropdown-shadow z-50">
 
-                        <!-- 1. FEATURED -->
-                        <div class="mega-col">
-                            <div class="mega-title">Featured</div>
-
-                            <a href="all_products.html?filter=New%20Women's">New Arrivals</a>
-                            <a href="all_products.html?filter=Women's%20bestsellers">Bestseller</a>
-                            <a href="all_products.html?filter=Women's%20Sale">Shop All Sale</a>
+                        <!-- FEATURED -->
+                        <div>
+                            <h3 class="font-bold text-lg mb-2">Featured</h3>
+                            <div class="flex flex-col gap-1 text-gray-700">
+                                <a href="all_products.html?filter=New%20Men's" class="hover:underline">New Arrivals</a>
+                                <a href="all_products.html?filter=Men's%20Bestsellers"
+                                    class="hover:underline">Bestseller</a>
+                                <a href="all_products.html?filter=Men's%20Sale" class="hover:underline">Shop All
+                                    Sale</a>
+                            </div>
                         </div>
 
-                        <!-- 2. SHOES -->
-                        <div class="mega-col">
-                            <div class="mega-title"
-                                onclick="location.href='all_products.html?filter=Women%27s%20Shoes'">
+                        <!-- SHOES -->
+                        <div>
+                            <a href="all_products.html?filter=Men's%20Shoes"
+                                class="font-bold text-lg mb-2 hover:underline">
                                 Shoes
+                            </a>
+                            <div class="flex flex-col gap-1 text-gray-700">
+                                <a href="all_products.html?filter=Men's%20Shoes" class="hover:underline">All Shoes</a>
+                                <a href="all_products.html?filter=Men's%20Lifestyle%20Shoes"
+                                    class="hover:underline">Lifestyle</a>
+                                <a href="all_products.html?filter=Men's%20Jordan%20Shoes"
+                                    class="hover:underline">Jordan</a>
+                                <a href="all_products.html?filter=Men's%20Running%20Shoes"
+                                    class="hover:underline">Running</a>
+                                <a href="all_products.html?filter=Men's%20Football%20Shoes"
+                                    class="hover:underline">Football</a>
+                                <a href="all_products.html?filter=Men's%20Basketball%20Shoes"
+                                    class="hover:underline">Basketball</a>
+                                <a href="all_products.html?filter=Men's%20Training%20&%20Gym%20Shoes"
+                                    class="hover:underline">Gym & Training</a>
+                                <a href="all_products.html?filter=Men's%20Tennis%20Shoes"
+                                    class="hover:underline">Tennis</a>
+                                <a href="all_products.html?filter=Men's%20Skate%20Shoes"
+                                    class="hover:underline">Skateboarding</a>
+                                <a href="all_products.html?filter=Men's%20Sandals%20&%20Shoes"
+                                    class="hover:underline">Sandals & Slides</a>
+                                <a href="all_products.html?filter=Men's%20Nike%20By%20You%20Shoes"
+                                    class="hover:underline">Nike By You</a>
                             </div>
-
-                            <a href="all_products.html?filter=Women's%20Shoes">All Shoes</a>
-                            <a href="all_products.html?filter=Women's%20Lifestyle%20Shoes">Lifestyle</a>
-                            <a href="all_products.html?filter=Women's%20Jordan%20Shoes">Jordan</a>
-                            <a href="all_products.html?filter=Women's%20Running%20Shoes">Running</a>
-                            <a href="all_products.html?filter=Women's%20Football%20Shoes">Football</a>
-                            <a href="all_products.html?filter=Women's%20Basketball%20Shoes">Basketball</a>
-                            <a href="all_products.html?filter=Women's%20Gym%20&%20Training%20Shoes">Gym & Training</a>
-                            <a href="all_products.html?filter=Women's%20Tennis%20Shoes">Tennis</a>
-                            <a href="all_products.html?filter=Women's%20Sandals%20&%20Slides">Sandals & Slides</a>
-                            <a href="all_products.html?filter=Women's%20Nike%20By%20You">Nike By You</a>
                         </div>
 
-                        <!-- 3. CLOTHING -->
-                        <div class="mega-col">
-                            <div class="mega-title"
-                                onclick="location.href='all_products.html?filter=Women%27s%20Clothing'">
-                                Clothing
+                        <!-- SHOP BY SPORT -->
+                        <div>
+                            <h3 class="font-bold text-lg mb-2">Shop By Sport</h3>
+                            <div class="flex flex-col gap-1 text-gray-700">
+                                <a href="all_products.html?filter=Men's%20Running" class="hover:underline">Running</a>
+                                <a href="all_products.html?filter=Men's%20Basketball"
+                                    class="hover:underline">Basketball</a>
+                                <a href="all_products.html?filter=Men's%20Football" class="hover:underline">Football</a>
+                                <a href="all_products.html?filter=Men's%20Golf" class="hover:underline">Golf</a>
+                                <a href="all_products.html?filter=Men's%20Tennis%20&%20Pickleball"
+                                    class="hover:underline">Tennis & Pickleball</a>
+                                <a href="all_products.html?filter=Men's%20Training%20&%20Gym"
+                                    class="hover:underline">Gym and Training</a>
+                                <a href="all_products.html?filter=Men's%20Yoga" class="hover:underline">Yoga</a>
+                                <a href="all_products.html?filter=Men's%20Skateboarding"
+                                    class="hover:underline">Skateboarding</a>
                             </div>
-
-                            <a href="all_products.html?filter=Women's%20Clothing">All Clothing</a>
-                            <a href="all_products.html?filter=Performance%20Essentials">Performance Essentials</a>
-                            <a href="all_products.html?filter=Women's%20Tops%20&%20T-Shirts">Tops & T-Shirts</a>
-                            <a href="all_products.html?filter=Women's%20Shorts">Shorts</a>
-                            <a href="all_products.html?filter=Women's%20Sports%20Bras">Sports Bras</a>
-                            <a href="all_products.html?filter=Women's%20Trousers%20&%20Thights">Pants & Leggings</a>
-                            <a href="all_products.html?filter=Women's%20Hoodies%20&%20Sweatshirts">Hoodies &
-                                Sweatshirts</a>
-                            <a href="all_products.html?filter=Women's%20Jackets%20&%20Gillets">Jackets & Gillets</a>
-                            <a href="all_products.html?filter=Women's%20Skirts%20&%20Dresses">Skirts & Dresses</a>
-                            <a href="all_products.html?filter=Modest%20Wear">Modest Wear</a>
-                            <a href="all_products.html?filter=Maternity">Nike Maternity</a>
-                            <a href="all_products.html?filter=Women's%20Plus%20Size%20Clothing">Plus Size</a>
                         </div>
-
-                        <!-- 4. SHOP BY SPORT -->
-                        <div class="mega-col">
-                            <div class="mega-title">Shop By Sport</div>
-
-                            <a href="all_products.html?filter=Women's%20Running">Running</a>
-                            <a href="all_products.html?filter=Women's%20Basketball">Basketball</a>
-                            <a href="all_products.html?filter=Women's%20Football">Football</a>
-                            <a href="all_products.html?filter=Women's%20Golf">Golf</a>
-                            <a href="all_products.html?filter=Women's%20Tennis%20&%20Pickleball">Tennis & Pickleball</a>
-                            <a href="all_products.html?filter=Women's%20Gym%20&%20Training">Gym and Training</a>
-                            <a href="all_products.html?filter=Women's%20Yoga">Yoga</a>
-                            <a href="all_products.html?filter=Women's%20Skate">Skateboarding</a>
-                        </div>
-
-                        <!-- 5. ACCESSORIES & EQUIPMENT -->
-                        <div class="mega-col">
-                            <div class="mega-title">Accessories & Equipment</div>
-
-                            <a href="all_products.html?filter=Women's%20Accessories%20&%20Equipment">All Accessories &
-                                Equipment</a>
-                            <a href="all_products.html?filter=Women's%20Bags%20&%20Backpacks">Bags & Backpacks</a>
-                            <a href="all_products.html?filter=Women's%20Socks">Socks</a>
-                            <a href="all_products.html?filter=Women's%20Hats%20&%20Headwear">Hats & Headwear</a>
-                        </div>
-
                     </div>
-                </li>
+                </div>
 
-                <li class="nav-item has-dropdown">
-                    <a href="kids.html" class="nav-link">Kids</a>
+                <!-- WOMEN MENU -->
+                <div class="relative group">
 
-                    <div class="dropdown-mega">
+                    <!-- Main Button -->
+                    <a href="women.html" class="font-bold hover:underline">
+                        Women
+                    </a>
+
+                    <!-- DROPDOWN -->
+                    <div
+                        class="absolute left-0 top-full hidden group-hover:flex bg-white p-6 gap-16 dropdown-shadow z-50">
 
                         <!-- 1. FEATURED -->
-                        <div class="mega-col">
-                            <div class="mega-title" onclick="location.href='all_products.html?filter=New%20Kids'"
-                                style="cursor:pointer;">
-                                Featured
-                            </div>
+                        <div>
+                            <h3 class="font-bold text-lg mb-2">Featured</h3>
+                            <div class="flex flex-col gap-1 text-gray-700">
 
-                            <a href="all_products.html?filter=New%20Kids">New Arrivals</a>
-                            <a href="all_products.html?filter=Kids%20Bestseller">Bestseller</a>
-                            <a href="all_products.html?filter=Back%20to%20School">Back to School</a>
-                            <a href="all_products.html?filter=Fitness%20Gear">Sport Gear</a>
-                            <a href="all_products.html?filter=Kids%20Lifestyle">Lifestyle Looks</a>
+                                <a href="all_products.html?filter=New%20Women's" class="hover:underline">
+                                    New Arrivals
+                                </a>
+
+                                <a href="all_products.html?filter=Women's%20bestsellers" class="hover:underline">
+                                    Bestseller
+                                </a>
+
+                                <a href="all_products.html?filter=Women's%20Sale" class="hover:underline">
+                                    Shop All Sale
+                                </a>
+
+                            </div>
                         </div>
 
                         <!-- 2. SHOES -->
-                        <div class="mega-col">
-                            <div class="mega-title" onclick="location.href='all_products.html?filter=Kids%20Shoes'"
-                                style="cursor:pointer;">
+                        <div>
+                            <a href="all_products.html?filter=Women's%20Shoes"
+                                class="font-bold text-lg mb-2 hover:underline">
                                 Shoes
+                            </a>
+
+                            <div class="flex flex-col gap-1 text-gray-700">
+                                <a href="all_products.html?filter=Women's%20Shoes" class="hover:underline">All Shoes</a>
+                                <a href="all_products.html?filter=Women's%20Lifestyle%20Shoes"
+                                    class="hover:underline">Lifestyle</a>
+                                <a href="all_products.html?filter=Women's%20Jordan%20Shoes"
+                                    class="hover:underline">Jordan</a>
+                                <a href="all_products.html?filter=Women's%20Running%20Shoes"
+                                    class="hover:underline">Running</a>
+                                <a href="all_products.html?filter=Women's%20Football%20Shoes"
+                                    class="hover:underline">Football</a>
+                                <a href="all_products.html?filter=Women's%20Basketball%20Shoes"
+                                    class="hover:underline">Basketball</a>
+                                <a href="all_products.html?filter=Women's%20Gym%20&%20Training%20Shoes"
+                                    class="hover:underline">Gym & Training</a>
+                                <a href="all_products.html?filter=Women's%20Tennis%20Shoes"
+                                    class="hover:underline">Tennis</a>
+                                <a href="all_products.html?filter=Women's%20Sandals%20&%20Slides"
+                                    class="hover:underline">Sandals & Slides</a>
+                                <a href="all_products.html?filter=Women's%20Sandlas%20&%20Slides"
+                                    class="hover:underline">Nike By You</a>
                             </div>
-
-                            <a href="all_products.html?filter=Kids%20Shoes">All Shoes</a>
-                            <a href="all_products.html?filter=Kids%20Lifestyle%20Shoes">Lifestyle</a>
-                            <a href="all_products.html?filter=Jordan%20Shoes%20for%20Kids">Jordan</a>
-                            <a href="all_products.html?filter=Kids%20Running%20Shoes">Running</a>
-                            <a href="all_products.html?filter=Kids%20Football%20Shoes">Football</a>
-                            <a href="all_products.html?filter=Kids%20Basketball%20Shoes">Basketball</a>
-                        </div>
-
-                        <!-- 3. CLOTHING -->
-                        <div class="mega-col">
-                            <div class="mega-title" onclick="location.href='all_products.html?filter=Kids%20Clothing'"
-                                style="cursor:pointer;">
-                                Clothing
-                            </div>
-
-                            <a href="all_products.html?filter=Kids%20Clothing">All Clothing</a>
-                            <a href="all_products.html?filter=Kids%20Tops%20&%20T-Shirts">Top & T-Shirts</a>
-                            <a href="all_products.html?filter=Kids%20Shorts">Shorts</a>
-                            <a href="all_products.html?filter=Kids%20Sports%20Bras">Sports Bras</a>
-                            <a href="all_products.html?filter=Kids%20Trousers%20&%20Thights">Pants & Leggings</a>
-                            <a href="all_products.html?filter=Kids%20Hoodies%20&%20Sweatshirts">Hoodies &
-                                Sweatshirts</a>
-                            <a href="all_products.html?filter=Kids%20Jackets%20&%20Gillets">Jackets & Gillets</a>
                         </div>
 
                         <!-- 4. SHOP BY SPORT -->
-                        <div class="mega-col">
-                            <div class="mega-title">Shop By Sport</div>
+                        <div>
+                            <h3 class="font-bold text-lg mb-2">Shop By Sport</h3>
 
-                            <a href="all_products.html?filter=Kids%20Running">Running</a>
-                            <a href="all_products.html?filter=Kids%20Basketball">Basketball</a>
-                            <a href="all_products.html?filter=Kids%20Football">Football</a>
-                            <a href="all_products.html?filter=Kids%20Training%20&%20Gym">Gym and Training</a>
+                            <div class="flex flex-col gap-1 text-gray-700">
+                                <a href="all_products.html?filter=Women's%20Running" class="hover:underline">Running</a>
+                                <a href="all_products.html?filter=Women's%20Basketball"
+                                    class="hover:underline">Basketball</a>
+                                <a href="all_products.html?filter=Women's%20Football"
+                                    class="hover:underline">Football</a>
+                                <a href="all_products.html?filter=Women's%20Golf" class="hover:underline">Golf</a>
+                                <a href="all_products.html?filter=Women's%20Tennis%20&%20Pickleball"
+                                    class="hover:underline">Tennis & Pickleball</a>
+                                <a href="all_products.html?filter=Women's%20Gym%20&%20Training"
+                                    class="hover:underline">Gym and Training</a>
+                                <a href="all_products.html?filter=Women's%20Yoga" class="hover:underline">Yoga</a>
+                                <a href="all_products.html?filter=Women's%20Skate"
+                                    class="hover:underline">Skateboarding</a>
+                            </div>
                         </div>
 
-                        <!-- 5. ACCESSORIES & EQUIPMENT -->
-                        <div class="mega-col">
-                            <div class="mega-title"
-                                onclick="location.href='all_products.html?filter=Kids%20Accessories%20&%20Equipment'"
-                                style="cursor:pointer;">
-                                Accessories & Equipment
-                            </div>
+                    </div>
+                </div>
 
-                            <a href="all_products.html?filter=Kids%20Accessories%20&%20Equipment">All Accessories &
-                                Equipment</a>
-                            <a href="all_products.html?filter=Kids%20Bags%20&%20Backpacks">Bags & Backpacks</a>
-                            <a href="all_products.html?filter=Kids%20Socks">Socks</a>
-                            <a href="all_products.html?filter=Kids%20Hat%20&%20Headwear">Hats & Headwear</a>
+                <!-- KIDS MENU -->
+                <div class="relative group">
+                    <a href="kids.html" class="font-bold hover:underline">Kids</a>
+
+                    <!-- DROPDOWN -->
+                    <div
+                        class="absolute left-0 top-full hidden group-hover:flex bg-white p-6 gap-16 dropdown-shadow z-50">
+
+                        <!-- 1. FEATURED -->
+                        <div>
+                            <h3 class="font-bold text-lg mb-2">Featured</h3>
+                            <div class="flex flex-col gap-1 text-gray-700">
+                                <a href="all_products.html?filter=New Kids" class="hover:underline">New Arrivals</a>
+                                <a href="all_products.html?filter=Kids Bestseller"
+                                    class="hover:underline">Bestseller</a>
+                                <a href="all_products.html?filter=Back to School" class="hover:underline">Back to
+                                    School</a>
+                                <a href="all_products.html?filter=Fitness Gear" class="hover:underline">Sport Gear</a>
+                                <a href="all_products.html?filter=Kids Lifestyle" class="hover:underline">Lifestyle
+                                    Looks</a>
+                            </div>
+                        </div>
+
+                        <!-- 2. SHOES -->
+                        <div>
+                            <h3 class="font-bold text-lg mb-2">Shoes</h3>
+                            <div class="flex flex-col gap-1 text-gray-700">
+                                <a href="all_products.html?filter=Kids Shoes" class="hover:underline">All Shoes</a>
+                                <a href="all_products.html?filter=Kids Lifestyle Shoes"
+                                    class="hover:underline">Lifestyle</a>
+                                <a href="all_products.html?filter=Jordan Shoes for Kids"
+                                    class="hover:underline">Jordan</a>
+                                <a href="all_products.html?filter=Kids Running Shoes"
+                                    class="hover:underline">Running</a>
+                                <a href="all_products.html?filter=Kids Football Shoes"
+                                    class="hover:underline">Football</a>
+                                <a href="all_products.html?filter=Kids Basketball Shoes"
+                                    class="hover:underline">Basketball</a>
+                            </div>
+                        </div>
+
+                        <!-- 4. SHOP BY SPORT -->
+                        <div>
+                            <h3 class="font-bold text-lg mb-2">Shop By Sport</h3>
+                            <div class="flex flex-col gap-1 text-gray-700">
+                                <a href="all_products.html?filter=Kids Running" class="hover:underline">Running</a>
+                                <a href="all_products.html?filter=Kids Basketball"
+                                    class="hover:underline">Basketball</a>
+                                <a href="all_products.html?filter=Kids Football" class="hover:underline">Football</a>
+                                <a href="all_products.html?filter=Kids Training & Gym" class="hover:underline">Gym and
+                                    Training</a>
+                            </div>
                         </div>
 
                         <!-- 6. KIDS BY AGE -->
-                        <div class="mega-col">
-                            <div class="mega-title">Kids By Age</div>
-
-                            <a href="all_products.html?filter=Older%20Kids">Older Kids (7 - 14 Years)</a>
-                            <a href="all_products.html?filter=Younger%20Kids">Younger Kids (4 - 7 Years)</a>
-                            <a href="all_products.html?filter=Babies%20&%20Toddlers">Babies & Toddlers (0 - 4 Years)</a>
+                        <div>
+                            <h3 class="font-bold text-lg mb-2">Kids By Age</h3>
+                            <div class="flex flex-col gap-1 text-gray-700">
+                                <a href="all_products.html?filter=Older Kids" class="hover:underline">Older Kids (7 - 14
+                                    Years)</a>
+                                <a href="all_products.html?filter=Younger Kids" class="hover:underline">Younger Kids (4
+                                    - 7 Years)</a>
+                                <a href="all_products.html?filter=Babies & Toddlers" class="hover:underline">Babies &
+                                    Toddlers (0 - 4 Years)</a>
+                            </div>
                         </div>
 
                     </div>
-                </li>
-                <li class="nav-item has-dropdown">
-                    <a href="all_products.html" class="nav-link sale-link">Sale</a>
+                </div>
 
-                    <div class="dropdown-mega sale-dropdown">
 
-                        <!-- 1. SALE & OFFERS -->
-                        <div class="mega-col">
-                            <div class="mega-title">Sale & Offers</div>
+                <!-- OTHER MENU ITEMS -->
+                <a href="#" class="hover:underline">Home</a>
+                <a href="#" class="hover:underline">Shop</a>
+                <a href="#" class="hover:underline">About</a>
+                <a href="#" class="hover:underline">Sign Up</a>
+            </nav>
 
-                            <a href="all_products.html">Shop All Sale</a>
-                            <a href="all_products.html?filter=Sale%20Bestsellers">Bestseller</a>
-                            <a href="all_products.html?filter=Last%20Chance">Last Chance</a>
-                        </div>
+            <!-- RIGHT: Search + Icons -->
+            <div class="flex items-center gap-4">
 
-                        <!-- 2. MEN'S SALE -->
-                        <div class="mega-col">
-                            <div class="mega-title" onclick="location.href='all_products.html?filter=Men%27s%20Sale'">
-                                Men's Sale</div>
+                <div class="relative">
+                    <input type="text" placeholder="What are you looking for?"
+                        class="border rounded-full px-4 py-2 pl-10 w-64">
+                    <span class="absolute left-3 top-2.5 text-gray-600">🔍</span>
+                </div>
 
-                            <a href="all_products.html?filter=Men%27s%20Sale%20Shoes">Shoes</a>
-                            <a href="all_products.html?filter=Men%27s%20Sale%20Clothing">Clothing</a>
-                            <a href="all_products.html?filter=Men%27s%20Sale%20Accessories%20&%20Equipment">Accessories
-                                & Equipment</a>
-                        </div>
-
-                        <!-- 3. WOMEN'S SALE -->
-                        <div class="mega-col">
-                            <div class="mega-title" onclick="location.href='all_products.html?filter=Women%27s%20Sale'">
-                                Women's Sale</div>
-
-                            <a href="all_products.html?filter=Women%27s%20Sale%20Shoes">Shoes</a>
-                            <a href="all_products.html?filter=Women%27s%20Sale%20Clothing">Clothing</a>
-                            <a href="all_products.html?filter=Women%27s%20Sale%20Accessories%20&%20Equipment">Accessories
-                                & Equipment</a>
-                        </div>
-
-                        <!-- 4. KIDS SALE -->
-                        <div class="mega-col">
-                            <div class="mega-title" onclick="location.href='all_products.html?filter=Kids%20Sale'">Kids
-                                Sale</div>
-
-                            <a href="all_products.html?filter=Kids%20Sale%20Shoes">Shoes</a>
-                            <a href="all_products.html?filter=Kids%20Sale%20Clothing">Clothing</a>
-                            <a href="all_products.html?filter=Kids%20Sale%20Accessories%20&%20Equipment">Accessories &
-                                Equipment</a>
-                        </div>
-
-                        <!-- 5. SHOP BY SPORT -->
-                        <div class="mega-col">
-                            <div class="mega-title">Shop By Sports</div>
-
-                            <a href="all_products.html?filter=Sale%20Running">Running</a>
-                            <a href="all_products.html?filter=Sale%20Basketball">Basketball</a>
-                            <a href="all_products.html?filter=Sale%20Football">Football</a>
-                            <a href="all_products.html?filter=Sale%20Training%20&%20Gym">Gym & Training</a>
-                            <a href="all_products.html?filter=Sale%20Tennis">Tennis</a>
-                        </div>
-                    </div>
-                </li>
-
-                <li class="nav-item"><a href="launch.html" class="nav-link">SNKRS</a></li>
-            </ul>
-        </nav>
-
-        <div class="nav-right" style="background-color: #ccc;">
-            <button id="search-btn" class="icon-btn">
-                <img src="../image/loupe.png" alt="Search" />
-            </button>
-
-            <a id="heart-btn" class="icon-btn" href="#">
-                <img src="../image/heart.png" alt="Favorite" />
-            </a>
-
-            <a href="cart.html" class="icon-btn">
-                <img src="../image/shopping-bag.png" alt="Cart" />
-            </a>
+                <button class="text-2xl">🤍</button>
+                <button class="text-2xl">🛒</button>
+            </div>
         </div>
     </header>
 
-    <!-- Search Overlay -->
-    <div id="search-overlay" class="search-overlay hidden">
-        <div class="search-box">
-            <input type="text" placeholder="Search..." id="search-input" />
-            <span id="cancel-search" class="cancel-btn">Cancel</span>
-        </div>
-    </div>
-
-    <!-- modal : Send Us Feedback -->
-    <div class="modal-backdrop" id="modalBackdrop" aria-hidden="true">
-        <div class="modal" role="dialog" aria-modal="true">
-            <div class="modal-header">
-                <div><strong id="modalTitle">Send Us Feedback</strong></div>
-                <button class="btn" id="closeModal">✕</button>
-            </div>
-            <div class="modal-body">
-                <div class="form-row">
-                    <label for="language">Language</label>
-                    <select id="language">
-                        <option>English</option>
-                        <option>Indonesia</option>
-                    </select>
-                </div>
-                <div class="form-row">
-                    <label for="topic">First what would you like to tell us about?</label>
-                    <select id="topic">
-                        <option value="">Select One</option>
-                        <option value="website">Our Website (nike.com)</option>
-                        <option value="retail">Our Retail Locations</option>
-                        <option value="service">Customer Service Experience</option>
-                        <option value="other">Something Else</option>
-                    </select>
-                    <div id="topicError" class="error hidden">Response Required</div>
-                </div>
-
-                <!-- dynamic panels -->
-                <div id="panelWebsite" class="hidden">
-                    <div class="form-row"><label>How was your experience?</label>
-                        <div class="star-row" id="starRow">
-                            <div class="star" data-value="1">1</div>
-                            <div class="star" data-value="2">2</div>
-                            <div class="star" data-value="3">3</div>
-                            <div class="star" data-value="4">4</div>
-                            <div class="star" data-value="5">5</div>
-                        </div>
-                    </div>
-                    <div class="form-row"><label>We'd love to hear your feedback. What was positive? What can we
-                            improve?</label>
-                        <textarea id="fbText" rows="4"></textarea>
-                    </div>
-                    <div class="form-row"><label>What was your primary goal for today's visit?</label>
-                        <select id="primaryGoal">
-                            <option>Browse/See What's New</option>
-                            <option>Search for a Specific Product</option>
-                            <option>Research/Compare Products (size, fit, features, price)</option>
-                            <option>Explore Sale Items</option>
-                            <option>Plan for a Store Trip</option>
-                            <option>Contact Customer Support</option>
-                            <option>Explore Nike Membership</option>
-                            <option>Something Else</option>
-                        </select>
-                    </div>
-                    <div class="form-row">
-                        <label>How easy was it to accomplish that goal?</label>
-                        <div class="radio-scale">
-                            <span class="small">Very Difficult</span>
-
-                            <label class="radio-item">
-                                <input type="radio" name="ease" value="1">
-                                <span class="circle"></span>
-                                <span class="label-number">1</span>
-                            </label>
-
-                            <label class="radio-item">
-                                <input type="radio" name="ease" value="2">
-                                <span class="circle"></span>
-                                <span class="label-number">2</span>
-                            </label>
-
-                            <label class="radio-item">
-                                <input type="radio" name="ease" value="3">
-                                <span class="circle"></span>
-                                <span class="label-number">3</span>
-                            </label>
-
-                            <label class="radio-item">
-                                <input type="radio" name="ease" value="4">
-                                <span class="circle"></span>
-                                <span class="label-number">4</span>
-                            </label>
-
-                            <label class="radio-item">
-                                <input type="radio" name="ease" value="5">
-                                <span class="circle"></span>
-                                <span class="label-number">5</span>
-                            </label>
-
-                            <span class="small">Very Easy</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="panelRetail" class="hidden">
-                    <div class="form-row"><label>How was your experience?</label>
-                        <div class="star-row">
-                            <div class="star">1</div>
-                            <div class="star">2</div>
-                            <div class="star">3</div>
-                            <div class="star">4</div>
-                            <div class="star">5</div>
-                        </div>
-                    </div>
-                    <div class="form-row"><label>We'd love to hear your feedback. What was positive? What can we
-                            improve?</label>
-                        <textarea rows="3"></textarea>
-                    </div>
-                </div>
-
-                <div id="panelService" class="hidden">
-                    <div class="form-row"><label>How was your experience?</label>
-                        <div class="star-row">
-                            <div class="star">1</div>
-                            <div class="star">2</div>
-                            <div class="star">3</div>
-                            <div class="star">4</div>
-                            <div class="star">5</div>
-                        </div>
-                    </div>
-                    <div class="form-row"><label>We'd love to hear your feedback. What was positive? What can we
-                            improve?</label>
-                        <textarea rows="3"></textarea>
-                    </div>
-                </div>
-
-                <div id="panelOther" class="hidden">
-                    <div class="form-row"><label>How was your experience?</label>
-                        <div class="star-row">
-                            <div class="star">1</div>
-                            <div class="star">2</div>
-                            <div class="star">3</div>
-                            <div class="star">4</div>
-                            <div class="star">5</div>
-                        </div>
-                    </div>
-                    <div class="form-row"><label>We'd love to hear your feedback. What was positive? What can we
-                            improve?</label>
-                        <textarea rows="3"></textarea>
-                    </div>
-                </div>
-
-            </div>
-            <div class="actions">
-                <button class="btn" id="cancelBtn">Cancel</button>
-                <button class="btn primary" id="submitFeedback">Submit</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- HERO SECTION -->
-    <section class="hero-banner">
-        <div class="spline-wrapper" style="background-color: #ccc;">
-            <h2 style="text-align: center;">Free Standard Delivery & 30-Day Free Returns</h2>
-            <iframe src="https://my.spline.design/nikeairmax90celebrationwithmousehover-LL4FGLacXw3tJE8b4AOst0tX/"
-                style="border:none;width:100%;height:100%;" frameborder="0"></iframe>
-        </div>
+    <!-- SPLINE BACKGROUND SECTION -->
+    <section class="w-full h-[700px] overflow-hidden">
+        <iframe src="https://my.spline.design/nikeairmax90celebrationwithmousehover-LL4FGLacXw3tJE8b4AOst0tX/"
+            frameborder="0" style="width:100%; height:100%; border:none;">
+        </iframe>
     </section>
-
-    <!-- ==== SHOP GIFTS BY SPORT SECTION ==== -->
-    <section class="gift-sport-section">
-        <h2>Shop Gifts by Sport</h2>
-
-        <div class="sport-carousel-container">
-            <button class="carousel-btn left-btn">❮</button>
-
-            <div class="sport-carousel">
-                <!-- Item 1 -->
-                <div class="sport-item" onclick="location.href='all_products.html?filter=Gifting Running'">
-                    <img src="../image/running.jpg" alt="Running">
-                    <p style="font-size: large;">Running</p>
-                </div>
-
-                <!-- Item 2 -->
-                <div class="sport-item" onclick="location.href='all_products.html?filter=Gifting Training & Gym'">
-                    <img src="../image/training.jpg" alt="Training">
-                    <p style="font-size: large;">Training</p>
-                </div>
-
-                <!-- Item 3 -->
-                <div class="sport-item" onclick="location.href='all_products.html?filter=Gifting Football'">
-                    <img src="../image/football.jpg" alt="Football">
-                    <p style="font-size: large;">Football</p>
-                </div>
-
-                <!-- Item 4 -->
-                <div class="sport-item" onclick="location.href='all_products.html?filter=Gifting Basketball'">
-                    <img src="../image/basketball.jpg" alt="Basketball">
-                    <p style="font-size: large;">Basketball</p>
-                </div>
-
-                <!-- Item 5 -->
-                <div class="sport-item" onclick="location.href='all_products.html?filter=Gifting Sportswear'">
-                    <img src="../image/sportswear.jpg" alt="Sportswear">
-                    <p style="font-size: large;">Sportswear</p>
-                </div>
-
-                <!-- Item 6 -->
-                <div class="sport-item" onclick="location.href='all_products.html?filter=Kids Gifting'">
-                    <img src="../image/kids.jpg" alt="Kids">
-                    <p style="font-size: large;">Kids</p>
-                </div>
-            </div>
-
-            <button class="carousel-btn right-btn">❯</button>
-        </div>
-    </section>
-    <!-- ==== END SECTION ==== -->
-
-
-    <script>
-        // =====================================================
-        // STAR SELECTION (utama, untuk panel website & lainnya)
-        // =====================================================
-        function initStarSelection() {
-            const starRows = document.querySelectorAll('.star-row');
-            starRows.forEach(row => {
-                row.addEventListener('click', e => {
-                    const t = e.target.closest('.star');
-                    if (!t) return;
-                    row.querySelectorAll('.star').forEach(s => s.classList.remove('selected'));
-                    t.classList.add('selected');
-                });
-            });
-        }
-        initStarSelection();
-
-
-        // =====================================================
-        // RESET FORM FUNCTION
-        // =====================================================
-        function resetFeedbackForm() {
-
-            // dropdown
-            document.getElementById('language').selectedIndex = 0;
-            document.getElementById('topic').selectedIndex = 0;
-
-            // textarea
-            document.querySelectorAll('.modal-body textarea').forEach(t => t.value = "");
-
-            // star selections
-            document.querySelectorAll('.star').forEach(s => s.classList.remove('selected'));
-
-            // radio scale
-            document.querySelectorAll('input[type="radio"][name="ease"]').forEach(r => r.checked = false);
-
-            // hide dynamic panels
-            ['panelWebsite', 'panelRetail', 'panelService', 'panelOther']
-                .forEach(id => document.getElementById(id).classList.add('hidden'));
-
-            // hide error
-            document.getElementById('topicError').classList.add('hidden');
-        }
-
-
-        // =====================================================
-        // HEADER INTERACTIONS
-        // =====================================================
-        const helpBtn = document.getElementById('helpBtn');
-        const helpPanel = document.getElementById('helpPanel');
-        const helpWrapper = helpBtn.parentElement;
-
-        helpWrapper.addEventListener("mouseenter", () => {
-            helpPanel.classList.add("show");
-            helpPanel.setAttribute("aria-hidden", "false");
-        });
-
-        helpWrapper.addEventListener("mouseleave", () => {
-            helpPanel.classList.remove("show");
-            helpPanel.setAttribute("aria-hidden", "true");
-        });
-
-        // Help → open help.html
-        helpBtn.addEventListener("click", () => {
-            window.location.href = "help.html";
-        });
-
-        // Other header buttons
-        document.getElementById('findStore').addEventListener('click', () => location.href = 'retail.html');
-        document.getElementById('joinBtn').addEventListener('click', () => location.href = 'membership.html');
-        document.getElementById('signInBtn').addEventListener('click', () => location.href = 'sign_in.html');
-
-
-        // =====================================================
-        // AUTH SIMULATION
-        // =====================================================
-        let isLoggedIn = false;
-        let username = 'dummy';
-
-        const userWrap = document.getElementById('userWrap');
-        const joinBtn = document.getElementById('joinBtn');
-        const signInBtn = document.getElementById('signInBtn');
-        const userGreeting = document.getElementById('userGreeting');
-        const userBtn = document.getElementById('userBtn');
-        const userDropdown = document.getElementById('userDropdown');
-        const logoutBtn = document.getElementById('logoutBtn');
-
-        function refreshAuthUI() {
-            if (isLoggedIn) {
-                joinBtn.classList.add('hidden');
-                signInBtn.classList.add('hidden');
-                userGreeting.textContent = `Hi, ${username}`;
-                userWrap.classList.remove('hidden');
-            } else {
-                joinBtn.classList.remove('hidden');
-                signInBtn.classList.remove('hidden');
-                userWrap.classList.add('hidden');
-            }
-        }
-        refreshAuthUI();
-
-        userBtn.addEventListener('click', () => userDropdown.classList.toggle('show'));
-        logoutBtn.addEventListener('click', () => {
-            isLoggedIn = false;
-            refreshAuthUI();
-            userDropdown.classList.remove('show');
-        });
-
-
-        // =====================================================
-        // MODAL FEEDBACK
-        // =====================================================
-        const modalBackdrop = document.getElementById('modalBackdrop');
-        const sendFeedbackTrigger = document.getElementById('sendFeedbackTrigger');
-        const closeModal = document.getElementById('closeModal');
-        const cancelBtn = document.getElementById('cancelBtn');
-        const submitFeedback = document.getElementById('submitFeedback');
-        const topic = document.getElementById('topic');
-        const topicError = document.getElementById('topicError');
-
-        sendFeedbackTrigger.addEventListener('click', (e) => {
-            e.preventDefault();
-            openModal();
-        });
-        closeModal.addEventListener('click', closeModalFn);
-        cancelBtn.addEventListener('click', closeModalFn);
-
-        function openModal() {
-            modalBackdrop.classList.add('show');
-            modalBackdrop.setAttribute('aria-hidden', 'false');
-        }
-
-        function closeModalFn() {
-            modalBackdrop.classList.remove('show');
-            modalBackdrop.setAttribute('aria-hidden', 'true');
-            resetFeedbackForm();
-        }
-
-        function hideAllPanels() {
-            ['panelWebsite', 'panelRetail', 'panelService', 'panelOther']
-                .forEach(id => document.getElementById(id).classList.add('hidden'));
-        }
-
-        // Panel switching
-        topic.addEventListener('change', () => {
-            topicError.classList.add('hidden');
-            hideAllPanels();
-            const v = topic.value;
-            if (v === 'website') document.getElementById('panelWebsite').classList.remove('hidden');
-            if (v === 'retail') document.getElementById('panelRetail').classList.remove('hidden');
-            if (v === 'service') document.getElementById('panelService').classList.remove('hidden');
-            if (v === 'other') document.getElementById('panelOther').classList.remove('hidden');
-        });
-
-
-        // =====================================================
-        // SUBMIT FEEDBACK
-        // =====================================================
-        submitFeedback.addEventListener('click', () => {
-
-            // 1. Pastikan topik dipilih
-            if (!topic.value) {
-                topicError.classList.remove('hidden');
-                topic.focus();
-                return;
-            }
-
-            // ============================================================
-            // VALIDASI PER PANEL
-            // ============================================================
-
-            // --- WEBSITE PANEL -----------------------------------------
-            if (topic.value === 'website') {
-
-                // star rating
-                const selectedStar = document.querySelector('#panelWebsite .star.selected');
-                if (!selectedStar) {
-                    alert("Please select a star rating.");
-                    return;
-                }
-
-                // textarea
-                const text = document.getElementById('fbText').value.trim();
-                if (!text) {
-                    alert("Please fill the feedback text.");
-                    return;
-                }
-
-                // primary goal
-                const goal = document.getElementById('primaryGoal').value;
-                if (!goal) {
-                    alert("Please select your primary goal.");
-                    return;
-                }
-
-                // radio scale
-                const ease = document.querySelector('input[name="ease"]:checked');
-                if (!ease) {
-                    alert("Please select how easy it was.");
-                    return;
-                }
-            }
-
-            // --- RETAIL PANEL ------------------------------------------
-            if (topic.value === 'retail') {
-                const star = document.querySelector('#panelRetail .star.selected');
-                const text = document.querySelector('#panelRetail textarea').value.trim();
-
-                if (!star) {
-                    alert("Please select a star rating.");
-                    return;
-                }
-                if (!text) {
-                    alert("Please fill the feedback text.");
-                    return;
-                }
-            }
-
-            // --- SERVICE PANEL -----------------------------------------
-            if (topic.value === 'service') {
-                const star = document.querySelector('#panelService .star.selected');
-                const text = document.querySelector('#panelService textarea').value.trim();
-
-                if (!star) {
-                    alert("Please select a star rating.");
-                    return;
-                }
-                if (!text) {
-                    alert("Please fill the feedback text.");
-                    return;
-                }
-            }
-
-            // --- OTHER PANEL -------------------------------------------
-            if (topic.value === 'other') {
-                const star = document.querySelector('#panelOther .star.selected');
-                const text = document.querySelector('#panelOther textarea').value.trim();
-
-                if (!star) {
-                    alert("Please select a star rating.");
-                    return;
-                }
-                if (!text) {
-                    alert("Please fill the feedback text.");
-                    return;
-                }
-            }
-
-            // ============================================================
-            // JIKA LOLOS VALIDASI — kirim feedback
-            // ============================================================
-            const payload = {
-                topic: topic.value,
-                language: document.getElementById('language').value
-            };
-
-            console.log("Feedback submitted:", payload);
-            alert("Terima kasih! Feedback Anda telah dikirim.");
-
-            closeModalFn();
-        });
-
-
-
-        // =====================================================
-        // AUTO-CLOSE MENUS
-        // =====================================================
-        document.addEventListener('click', e => {
-            if (!helpPanel.contains(e.target) && e.target !== helpBtn)
-                helpPanel.classList.remove('show');
-
-            if (!userWrap.contains(e.target) && e.target !== userBtn)
-                userDropdown.classList.remove('show');
-        });
-
-
-        // =====================================================
-        // DEV HELPER (Press L to toggle login)
-        // =====================================================
-        document.addEventListener('keydown', e => {
-            if (e.key === 'L') {
-                isLoggedIn = !isLoggedIn;
-                if (isLoggedIn) username = 'dummy slayer';
-                refreshAuthUI();
-            }
-        });
-
-        // Search Overlay Logic
-        const searchBtn = document.getElementById("search-btn");
-        const searchOverlay = document.getElementById("search-overlay");
-        const cancelSearch = document.getElementById("cancel-search");
-
-
-        searchBtn.onclick = () => {
-            searchOverlay.classList.remove("hidden");
-            document.getElementById("search-input").focus();
-        };
-
-
-        cancelSearch.onclick = () => {
-            searchOverlay.classList.add("hidden");
-        };
-
-
-        // Heart button JS: arahkan sesuai login
-        const heartBtn = document.getElementById("heart-btn");
-        const userLoggedIn = false; // ganti dengan status login asli jika sudah ada backend
-
-
-        heartBtn.href = userLoggedIn ? "favourite.html" : "sign_in.html";
-
-
-        const carousel = document.querySelector(".sport-carousel");
-        const btnLeft = document.querySelector(".left-btn");
-        const btnRight = document.querySelector(".right-btn");
-
-        btnRight.addEventListener("click", () => {
-            carousel.scrollLeft += 600; // ukuran sesuai width
-        });
-
-        btnLeft.addEventListener("click", () => {
-            carousel.scrollLeft -= 600;
-        });
-
-    </script>
 
 </body>
 
