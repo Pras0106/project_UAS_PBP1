@@ -1,204 +1,234 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nike Sign In</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nike Sign In</title>
 
-<style>
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: Arial, sans-serif;
-    }
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
 
-    body, html {
-        width: 100%;
-        height: 100%;
-        overflow: hidden;
-        background: #000;
-    }
+        body,
+        html {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #000;
+        }
 
-    .bg-spline {
-        position: fixed;
-        inset: 0;
-        width: 100%;
-        height: 100%;
-        z-index: 0;
-        pointer-events: auto !important;
-    }
+        .bg-spline {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: auto !important;
+        }
 
-    .login-wrapper {
-        position: fixed;
-        inset: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 10;
-        pointer-events: none;
-    }
+        .login-wrapper {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+            pointer-events: none;
+        }
 
-    .login-box {
-        width: 380px;
-        background: white;
-        border-radius: 18px;
-        padding: 40px 32px;
-        box-shadow: 0 12px 40px rgba(0,0,0,0.25);
-        pointer-events: auto;
-    }
+        .login-box {
+            width: 380px;
+            background: white;
+            border-radius: 18px;
+            padding: 40px 32px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+            pointer-events: auto;
+        }
 
-    .login-box h1 {
-        font-size: 22px;
-        margin-bottom: 8px;
-        line-height: 1.4;
-    }
+        .login-box h1 {
+            font-size: 22px;
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
 
-    input[type=email] {
-        width: 100%;
-        border: 1px solid #ccc;
-        padding: 12px;
-        border-radius: 6px;
-        margin-top: 8px;
-        font-size: 15px;
-    }
+        input[type=email] {
+            width: 100%;
+            border: 1px solid #ccc;
+            padding: 12px;
+            border-radius: 6px;
+            margin-top: 8px;
+            font-size: 15px;
+        }
 
-    .btn {
-        margin-top: 20px;
-        width: 100%;
-        background: #000;
-        color: white;
-        padding: 14px;
-        border-radius: 30px;
-        border: none;
-        font-weight: bold;
-        cursor: pointer;
-        font-size: 15px;
-    }
+        .btn {
+            margin-top: 20px;
+            width: 100%;
+            background: #000;
+            color: white;
+            padding: 14px;
+            border-radius: 30px;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 15px;
+        }
 
-    #country {
-        width: 100%;
-        margin-top: 10px;
-        padding: 10px;
-        border-radius: 6px;
-        border: 1px solid #ccc;
-        font-size: 14px;
-        display: none;
-    }
+        #country {
+            width: 100%;
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+            display: none;
+        }
 
-    #change-btn {
-        cursor: pointer;
-        color: #0077ff;
-        text-decoration: underline;
-    }
+        #change-btn {
+            cursor: pointer;
+            color: #0077ff;
+            text-decoration: underline;
+        }
 
-    #error-msg {
-        color: red;
-        font-size: 14px;
-        margin-top: 10px;
-        display: none;
-    }
-</style>
+        #error-msg {
+            color: red;
+            font-size: 14px;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .login-box {
+            position: absolute;
+            /* wajib */
+            cursor: move;
+            /* icon drag */
+        }
+    </style>
 </head>
 
 <body>
 
-<div class="bg-spline">
-    <iframe 
-        src="https://my.spline.design/boxeshover-ZrkOuhJRUFOiCbMsVEdIHJk0/"
-        frameborder="0"
-        width="100%"
-        height="100%"
-        style="border:0;">
-    </iframe>
-</div>
-
-<div class="login-wrapper">
-    <div class="login-box">
-
-        <img src="https://upload.wikimedia.org/wikipedia/commons/a/a6/Logo_NIKE.svg"
-             style="width: 60px; margin-bottom: 20px;">
-
-        <h1>Enter your email to join us or sign in.</h1>
-
-        <p style="margin: 6px 0 10px 0;">
-            <span id="current-country">Indonesia</span>
-            <span id="change-btn">Change</span>
-        </p>
-
-        <select name="country" id="country" autocomplete="off">
-            <option value="AF">Afghanistan</option>
-            <option value="AL">Albania</option>
-            <option value="DZ">Algeria</option>
-            <option value="ID" selected>Indonesia</option>
-        </select>
-
-        <label>Email</label>
-        <input id="emailInput" type="email" placeholder="Email" required>
-
-        <p id="error-msg">Please enter a valid email.</p>
-
-        <button id="continueBtn" class="btn">Continue</button>
+    <div class="bg-spline">
+        <iframe src="https://my.spline.design/boxeshover-ZrkOuhJRUFOiCbMsVEdIHJk0/" frameborder="0" width="100%"
+            height="100%" style="border:0;">
+        </iframe>
     </div>
-</div>
 
-<script>
-    const changeBtn = document.getElementById("change-btn");
-    const select = document.getElementById("country");
-    const current = document.getElementById("current-country");
+    <div class="login-wrapper">
+        <div class="login-box" id="draggable-login">
 
-    const continueBtn = document.getElementById("continueBtn");
-    const emailInput = document.getElementById("emailInput");
-    const errorMsg = document.getElementById("error-msg");
+            <img src="https://upload.wikimedia.org/wikipedia/commons/a/a6/Logo_NIKE.svg"
+                style="width: 60px; margin-bottom: 20px;">
 
-    // Toggle dropdown
-    changeBtn.addEventListener("click", () => {
-        select.style.display = select.style.display === "block" ? "none" : "block";
-    });
+            <h1>Enter your email to join us or sign in.</h1>
 
-    // Update country
-    select.addEventListener("change", () => {
-        current.textContent = select.options[select.selectedIndex].text;
-        select.style.display = "none";
-    });
+            <p style="margin: 6px 0 10px 0;">
+                <span id="current-country">Indonesia</span>
+                <span id="change-btn">Change</span>
+            </p>
 
-    // Allowed characters only
-    emailInput.addEventListener("input", () => {
-        emailInput.value = emailInput.value.replace(/[^a-zA-Z0-9@._]/g, "");
-    });
+            <select name="country" id="country" autocomplete="off">
+                <option value="AF">Afghanistan</option>
+                <option value="AL">Albania</option>
+                <option value="DZ">Algeria</option>
+                <option value="ID" selected>Indonesia</option>
+            </select>
 
-    // Email validation rule
-    function isValidEmail(email) {
-        const regex = /^[A-Za-z0-9._]+@[A-Za-z0-9_]+\.[A-Za-z0-9_]+$/;
-        return regex.test(email);
-    }
+            <label>Email</label>
+            <input id="emailInput" type="email" placeholder="Email" required>
 
-    // MAIN LOGIC (shared by Enter + Continue button)
-    function submitEmail() {
-        const email = emailInput.value.trim();
+            <p id="error-msg">Please enter a valid email.</p>
 
-        if (email === "" || !isValidEmail(email)) {
-            errorMsg.style.display = "block";
-            emailInput.value = "";
-            window.location.href = "sign_in.html";
-            return;
+            <button id="continueBtn" class="btn">Continue</button>
+        </div>
+    </div>
+
+    <script>
+        const changeBtn = document.getElementById("change-btn");
+        const select = document.getElementById("country");
+        const current = document.getElementById("current-country");
+
+        const continueBtn = document.getElementById("continueBtn");
+        const emailInput = document.getElementById("emailInput");
+        const errorMsg = document.getElementById("error-msg");
+
+        // Toggle dropdown
+        changeBtn.addEventListener("click", () => {
+            select.style.display = select.style.display === "block" ? "none" : "block";
+        });
+
+        // Update country
+        select.addEventListener("change", () => {
+            current.textContent = select.options[select.selectedIndex].text;
+            select.style.display = "none";
+        });
+
+        // Allowed characters only
+        emailInput.addEventListener("input", () => {
+            emailInput.value = emailInput.value.replace(/[^a-zA-Z0-9@._]/g, "");
+        });
+
+        // Email validation rule
+        function isValidEmail(email) {
+            const regex = /^[A-Za-z0-9._]+@[A-Za-z0-9_]+\.[A-Za-z0-9_]+$/;
+            return regex.test(email);
         }
 
-        window.location.href = "register.html";
-    }
+        // MAIN LOGIC (shared by Enter + Continue button)
+        function submitEmail() {
+            const email = emailInput.value.trim();
 
-    // Click continue
-    continueBtn.addEventListener("click", submitEmail);
+            if (email === "" || !isValidEmail(email)) {
+                errorMsg.style.display = "block";
+                emailInput.value = "";
+                window.location.href = "sign_in.html";
+                return;
+            }
 
-    // PRESS ENTER → trigger submitEmail()
-    emailInput.addEventListener("keydown", (e) => {
-        if (e.key === "Enter") {
-            e.preventDefault(); 
-            submitEmail();
+            window.location.href = "register.html";
         }
-    });
-</script>
+
+        // Click continue
+        continueBtn.addEventListener("click", submitEmail);
+
+        // PRESS ENTER → trigger submitEmail()
+        emailInput.addEventListener("keydown", (e) => {
+            if (e.key === "Enter") {
+                e.preventDefault();
+                submitEmail();
+            }
+        });
+
+        const box = document.getElementById('draggable-login');
+        let drag = false;
+        let offsetX, offsetY;
+
+        box.addEventListener('mousedown', (e) => {
+            drag = true;
+            offsetX = e.clientX - box.getBoundingClientRect().left;
+            offsetY = e.clientY - box.getBoundingClientRect().top;
+            box.style.cursor = 'grabbing';
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (drag) {
+                box.style.left = `${e.clientX - offsetX}px`;
+                box.style.top = `${e.clientY - offsetY}px`;
+            }
+        });
+
+        document.addEventListener('mouseup', () => {
+            drag = false;
+            box.style.cursor = 'move';
+        });
+
+    </script>
 
 
 </body>
+
 </html>
