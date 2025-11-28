@@ -395,6 +395,129 @@
         </iframe>
     </section>
 
+    <!-- FLASH SALES SECTION -->
+    <section class="max-w-7xl mx-auto px-4 mt-20">
+
+        <!-- Top Bar -->
+        <div class="flex items-center justify-between mb-6">
+            <div>
+                <div class="text-red-500 font-bold text-sm flex items-center gap-2">
+                    <span class="text-lg">▣</span> Today's
+                </div>
+                <h2 class="text-4xl font-bold mt-1">Flash Sales</h2>
+            </div>
+
+            <!-- Countdown -->
+            <div class="flex items-center gap-6 text-center text-lg font-semibold">
+                <div>
+                    <p class="text-sm text-gray-500">Days</p>
+                    <h3 id="days">00</h3>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-500">Hours</p>
+                    <h3 id="hours">23</h3>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-500">Minutes</p>
+                    <h3 id="minutes">19</h3>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-500">Seconds</p>
+                    <h3 id="seconds">56</h3>
+                </div>
+            </div>
+
+            <!-- Arrow Buttons -->
+            <div class="flex gap-3">
+                <button id="flash-left"
+                    class="w-10 h-10 rounded-full border flex items-center justify-center hover:bg-gray-200">←</button>
+                <button id="flash-right"
+                    class="w-10 h-10 rounded-full border flex items-center justify-center hover:bg-gray-200">→</button>
+            </div>
+        </div>
+
+        <!-- PRODUCT SLIDER -->
+        <div id="flash-scroll" class="flex gap-6 overflow-x-auto scroll-smooth pb-4 no-scrollbar">
+
+            <!-- CARD ITEM -->
+            <div class="min-w-[260px] bg-white border rounded-xl p-4 relative">
+                <span class="absolute top-3 left-3 bg-red-500 text-white text-xs px-2 py-1 rounded">-40%</span>
+                <img src="../image/AIR+FORCE+1+'07.png" class="w-full h-40 object-contain" />
+                <h3 class="mt-3 font-semibold">Nike Air Force 1</h3>
+                <p class="text-red-500 font-bold">Rp 619.600
+                    <span class="text-gray-400 line-through text-sm">Rp 1.549.000</span>
+                </p>
+                <div class="flex gap-1 mt-1 text-yellow-400">⭐⭐⭐⭐⭐ <span class="text-gray-600 text-sm">(88)</span></div>
+            </div>
+
+            <!-- CARD -->
+            <div class="min-w-[260px] bg-white border rounded-xl p-4 relative">
+                <span class="absolute top-3 left-3 bg-red-500 text-white text-xs px-2 py-1 rounded">-20%</span>
+                <img src="../image/Paris Saint-Germain Air Max DN8.jpeg" class="w-full h-40 object-contain" />
+                <h3 class="mt-3 font-semibold">Paris Saint-Germain Air Max DN8</h3>
+                <p class="text-red-500 font-bold">Rp 2.538.000
+                    <span class="text-gray-400 line-through text-sm">Rp 3.169.000</span>
+                </p>
+                <div class="flex gap-1 mt-1 text-yellow-400">⭐⭐⭐⭐⭐ <span class="text-gray-600 text-sm">(80)</span></div>
+            </div>
+
+            <!-- CARD -->
+            <div class="min-w-[260px] bg-white border rounded-xl p-4 relative">
+                <span class="absolute top-3 left-3 bg-red-500 text-white text-xs px-2 py-1 rounded">-30%</span>
+                <img src="../image/Nike Air Jordan 1 High.jpg" class="w-full h-40 object-contain" />
+                <h3 class="mt-3 font-semibold">Nike Air Jordan 1 High</h3>
+                <p class="text-red-500 font-bold">Rp 854.700
+                    <span class="text-gray-400 line-through text-sm">Rp 2.349.000</span>
+                </p>
+                <div class="flex gap-1 mt-1 text-yellow-400">⭐⭐⭐⭐⭐ <span class="text-gray-600 text-sm">(99)</span></div>
+            </div>
+
+            <!-- CARD -->
+            <div class="min-w-[260px] bg-white border rounded-xl p-4 relative">
+                <span class="absolute top-3 left-3 bg-red-500 text-white text-xs px-2 py-1 rounded">-30%</span>
+                <img src="../image/Nike Zoom Pegasus Turbo.jpg" class="w-full h-40 object-contain" />
+                <h3 class="mt-3 font-semibold">Nike Zoom Pegasus Turbo</h3>
+                <p class="text-red-500 font-bold">Rp 719.700
+                    <span class="text-gray-400 line-through text-sm">Rp 2.399.000</span>
+                </p>
+                <div class="flex gap-1 mt-1 text-yellow-400">⭐⭐⭐⭐⭐ <span class="text-gray-600 text-sm">(99)</span></div>
+            </div>
+
+            <!-- CARD -->
+            <div class="min-w-[260px] bg-white border rounded-xl p-4 relative">
+                <span class="absolute top-3 left-3 bg-red-500 text-white text-xs px-2 py-1 rounded">-40%</span>
+                <img src="../image/Nike Air Zoom AlphaFly Next 2.jpeg" class="w-full h-40 object-contain" />
+                <h3 class="mt-3 font-semibold">Nike Zoom Alphafly Next%</h3>
+                <p class="text-red-500 font-bold">Rp 1.959.600
+                    <span class="text-gray-400 line-through text-sm">Rp 2.849.000</span>
+                </p>
+                <div class="flex gap-1 mt-1 text-yellow-400">⭐⭐⭐⭐⭐ <span class="text-gray-600 text-sm">(73)</span></div>
+            </div>
+
+        </div>
+
+        <!-- View All -->
+        <div class="text-center mt-10">
+            <button class="bg-red-500 text-white px-10 py-3 rounded-lg text-lg">View All Products</button>
+        </div>
+
+    </section>
+
+    <script>
+        const scrollBox = document.getElementById("flash-scroll");
+        const leftBtn = document.getElementById("flash-left");
+        const rightBtn = document.getElementById("flash-right");
+
+        rightBtn.addEventListener("click", () => {
+            scrollBox.scrollBy({ left: 300, behavior: "smooth" });
+        });
+
+        leftBtn.addEventListener("click", () => {
+            scrollBox.scrollBy({ left: -300, behavior: "smooth" });
+        });
+    </script>
+
+
 </body>
 
 </html>
