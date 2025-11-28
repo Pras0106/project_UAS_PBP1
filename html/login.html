@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nike Sign In</title>
+    <title>Nike Create Account</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 
     <style>
         * {
@@ -17,216 +18,704 @@
         body,
         html {
             width: 100%;
-            height: 100%;
-            overflow: hidden;
+            min-height: 100%;
+            overflow-y: auto;
+            /* <-- allow scroll */
             background: #000;
         }
 
+        /* Spline background */
         .bg-spline {
             position: fixed;
             inset: 0;
             width: 100%;
             height: 100%;
             z-index: 0;
-            pointer-events: auto !important;
         }
 
-        .login-wrapper {
-            position: fixed;
-            inset: 0;
+        .bg-spline iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            pointer-events: none;
+            /* default tidak interaktif */
+        }
+
+        /* SECTION WRAPPER */
+        .section {
+            position: relative;
+            width: 100%;
+            min-height: 100vh;
+            /* Fullscreen height */
             display: flex;
-            justify-content: center;
+            justify-content: flex-start;
             align-items: center;
+            padding-left: 40px;
+            padding-top: 120px;
             z-index: 10;
             pointer-events: none;
         }
 
-        .login-box {
-            width: 380px;
-            background: white;
-            border-radius: 18px;
-            padding: 40px 32px;
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+        /* Form Box */
+        .register-box {
+            width: 340px;
+            background: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            position: absolute;
+            z-index: 20;
+            cursor: move;
             pointer-events: auto;
         }
 
-        .login-box h1 {
-            font-size: 22px;
-            margin-bottom: 8px;
-            line-height: 1.4;
-        }
-
-        input[type=email] {
+        .input-line {
             width: 100%;
-            border: 1px solid #ccc;
-            padding: 12px;
-            border-radius: 6px;
-            margin-top: 8px;
+            padding: 14px 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
             font-size: 15px;
+            margin-bottom: 15px;
         }
 
-        .btn {
-            margin-top: 20px;
+        .input-underline {
             width: 100%;
-            background: #000;
+            padding: 10px 0;
+            font-size: 15px;
+            border: none;
+            border-bottom: 1px solid #ccc;
+            outline: none;
+        }
+
+        .input-underline:focus {
+            border-bottom: 1px solid black;
+        }
+
+        .btn-create {
+            width: 100%;
+            background: #e53935;
             color: white;
             padding: 14px;
-            border-radius: 30px;
-            border: none;
+            border-radius: 8px;
             font-weight: bold;
+            border: none;
             cursor: pointer;
-            font-size: 15px;
+            margin-bottom: 18px;
         }
 
-        #country {
+        .btn-create:hover {
+            background: #c62828;
+        }
+
+        .btn-google {
             width: 100%;
-            margin-top: 10px;
-            padding: 10px;
-            border-radius: 6px;
             border: 1px solid #ccc;
-            font-size: 14px;
-            display: none;
-        }
-
-        #change-btn {
+            padding: 14px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
             cursor: pointer;
-            color: #0077ff;
-            text-decoration: underline;
+            background: white;
         }
 
-        #error-msg {
-            color: red;
+        .btn-google:hover {
+            background: #f5f5f5;
+        }
+
+        .google-icon {
+            width: 20px;
+        }
+
+        /* FOOTER (NOT FIXED) */
+        footer {
+            width: 100%;
+            background: #000;
+            color: #fff;
+            padding: 60px 80px 30px;
+            z-index: 20;
+            position: relative;
+        }
+
+        .footer-container {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        .footer-box h3 {
+            font-size: 18px;
+            margin-bottom: 14px;
+        }
+
+        .footer-box p,
+        .footer-box a {
             font-size: 14px;
-            margin-top: 10px;
-            display: none;
+            line-height: 1.8;
+            color: #ccc;
+            text-decoration: none;
         }
 
-        .login-box {
-            position: absolute;
-            /* wajib */
-            cursor: move;
-            /* icon drag */
+        .footer-box a:hover {
+            color: white;
+        }
+
+        .footer-input {
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            border: 1px solid #777;
+            border-radius: 6px;
+            overflow: hidden;
+            width: 220px;
+        }
+
+        .footer-input input {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            background: transparent;
+            outline: none;
+            color: white;
+        }
+
+        .footer-input button {
+            padding: 10px 14px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            color: white;
+        }
+
+        .copyright {
+            text-align: center;
+            margin-top: 30px;
+            color: #777;
+            font-size: 13px;
+            border-top: 1px solid #222;
+            padding-top: 12px;
         }
     </style>
 </head>
 
 <body>
 
+    <!-- TOP BLACK BAR -->
+    <div class="w-full bg-black text-white text-sm py-2" style="position:relative; z-index:30;">
+        <div class="max-w-7xl mx-auto flex justify-between px-4">
+            <div></div>
+            <div class="flex gap-6">
+                <a href="#" class="hover:underline">Help</a>
+                <a href="#" class="hover:underline">Sign In</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN HEADER MENU -->
+    <header class="w-full border-b bg-white" style="position:relative; z-index:30;">
+        <div class="max-w-7xl mx-auto flex items-center justify-between py-4 px-4">
+
+            <!-- LEFT (menu) -->
+            <nav class="flex items-center gap-10 font-medium text-lg">
+
+                <!-- NEW & FEATURED (with dropdown) -->
+                <div class="relative group">
+                    <button class="font-bold hover:underline">New &amp; Featured</button>
+
+                    <!-- DROPDOWN -->
+                    <div class="absolute left-0 top-full hidden group-hover:grid bg-white p-6 dropdown-shadow z-50
+                grid-flow-col auto-cols-max gap-12 w-max">
+
+
+                        <!-- FEATURED -->
+                        <div>
+                            <h3 class="font-bold text-lg mb-2">Featured</h3>
+                            <div class="flex flex-col gap-1 text-gray-700">
+
+                                <a href="all_products.html?filter=New%20&amp;%20Upcoming%20Drops"
+                                    class="hover:underline">
+                                    New &amp; Upcoming Drops
+                                </a>
+                                <a href="all_products.html?filter=New%20Arrivals" class="hover:underline">
+                                    New Arrivals
+                                </a>
+                                <a href="all_products.html?filter=Bestseller" class="hover:underline">
+                                    Bestseller
+                                </a>
+                                <a href="all_products.html?filter=SNKRS%20Launch%20Calendar" class="hover:underline">
+                                    SNKRS Launch Calendar
+                                </a>
+                                <a href="all_products.html?filter=Customize%20with%20Nike%20by%20You"
+                                    class="hover:underline">
+                                    Customize with Nike by You
+                                </a>
+                                <a href="all_products.html?filter=Jordan" class="hover:underline">
+                                    Jordan
+                                </a>
+                                <a href="all_products.html?filter=LebronJames" class="hover:underline">
+                                    LebronJames
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- TRENDING -->
+                        <div>
+                            <h3 class="font-bold text-lg mb-2">Trending</h3>
+                            <div class="flex flex-col gap-1 text-gray-700">
+                                <a href="all_products.html?filter=More%20Color%20More%20Running"
+                                    class="hover:underline">More Color More Running</a>
+                                <a href="all_products.html?filter=Vomero%20Premium" class="hover:underline">Vomero
+                                    Premium</a>
+                                <a href="all_products.html?filter=What's%20Trending" class="hover:underline">What's
+                                    Trending</a>
+                                <a href="all_products.html?filter=24.7%20Collection" class="hover:underline">24.7
+                                    Collection</a>
+                                <a href="all_products.html?filter=Colours%20of%20Season" class="hover:underline">Colours
+                                    of Season</a>
+                                <a href="all_products.html?filter=Retro%20Running" class="hover:underline">Retro
+                                    Running</a>
+                            </div>
+                        </div>
+
+                        <!-- SHOP ICONS -->
+                        <div>
+                            <h3 class="font-bold text-lg mb-2">Shop Icons</h3>
+                            <div class="flex flex-col gap-1 text-gray-700">
+                                <a href="all_products.html?filter=Air%20Force%201%20Shoes" class="hover:underline">Air
+                                    Force 1</a>
+                                <a href="all_products.html?filter=Air%20Jordan%201%20Shoes" class="hover:underline">Air
+                                    Jordan 1</a>
+                                <a href="all_products.html?filter=Air%20Max%20Shoes" class="hover:underline">Air Max</a>
+                                <a href="all_products.html?filter=Dunk%20Shoes" class="hover:underline">Dunk</a>
+                                <a href="all_products.html?filter=Cortez%20Shoes" class="hover:underline">Cortez</a>
+                                <a href="all_products.html?filter=Blazer%20Shoes" class="hover:underline">Blazer</a>
+                                <a href="all_products.html?filter=Nike%20Pegasus%20Shoes"
+                                    class="hover:underline">Pegasus</a>
+                                <a href="all_products.html?filter=Nike%20Vomero%20Shoes"
+                                    class="hover:underline">Vomero</a>
+                            </div>
+                        </div>
+
+                        <!-- SHOP BY SPORT -->
+                        <div>
+                            <h3 class="font-bold text-lg mb-2">Shop By Sport</h3>
+                            <div class="flex flex-col gap-1 text-gray-700">
+                                <a href="running.html" class="hover:underline">Running</a>
+                                <a href="basketball.html" class="hover:underline">Basketball</a>
+                                <a href="football.html" class="hover:underline">Football</a>
+                                <a href="golf.html" class="hover:underline">Golf</a>
+                                <a href="tennis.html" class="hover:underline">Tennis</a>
+                                <a href="training.html" class="hover:underline">Gym and Training</a>
+                                <a href="yoga.html" class="hover:underline">Yoga</a>
+                                <a href="skateboarding.html" class="hover:underline">Skateboarding</a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- MENU: MEN -->
+                <div class="relative group">
+                    <!-- BUTTON MEN -->
+                    <a href="men.html" class="font-bold group-hover:underline">
+                        Men
+                    </a>
+
+                    <!-- DROPDOWN -->
+                    <div class="absolute left-0 top-full hidden group-hover:grid bg-white p-6 dropdown-shadow z-50
+                grid-flow-col auto-cols-max gap-12 w-max">
+
+
+                        <!-- FEATURED -->
+                        <div>
+                            <h3 class="font-bold text-lg mb-2">Featured</h3>
+                            <div class="flex flex-col gap-1 text-gray-700">
+                                <a href="all_products.html?filter=New%20Men's" class="hover:underline">New Arrivals</a>
+                                <a href="all_products.html?filter=Men's%20Bestsellers"
+                                    class="hover:underline">Bestseller</a>
+                                <a href="all_products.html?filter=Men's%20Sale" class="hover:underline">Shop All
+                                    Sale</a>
+                            </div>
+                        </div>
+
+                        <!-- SHOES -->
+                        <div>
+                            <a href="all_products.html?filter=Men's%20Shoes"
+                                class="font-bold text-lg mb-2 hover:underline">
+                                Shoes
+                            </a>
+                            <div class="flex flex-col gap-1 text-gray-700">
+                                <a href="all_products.html?filter=Men's%20Shoes" class="hover:underline">All Shoes</a>
+                                <a href="all_products.html?filter=Men's%20Lifestyle%20Shoes"
+                                    class="hover:underline">Lifestyle</a>
+                                <a href="all_products.html?filter=Men's%20Jordan%20Shoes"
+                                    class="hover:underline">Jordan</a>
+                                <a href="all_products.html?filter=Men's%20Running%20Shoes"
+                                    class="hover:underline">Running</a>
+                                <a href="all_products.html?filter=Men's%20Football%20Shoes"
+                                    class="hover:underline">Football</a>
+                                <a href="all_products.html?filter=Men's%20Basketball%20Shoes"
+                                    class="hover:underline">Basketball</a>
+                                <a href="all_products.html?filter=Men's%20Training%20&amp;%20Gym%20Shoes"
+                                    class="hover:underline">Gym &amp; Training</a>
+                                <a href="all_products.html?filter=Men's%20Tennis%20Shoes"
+                                    class="hover:underline">Tennis</a>
+                                <a href="all_products.html?filter=Men's%20Skate%20Shoes"
+                                    class="hover:underline">Skateboarding</a>
+                                <a href="all_products.html?filter=Men's%20Sandals%20&amp;%20Shoes"
+                                    class="hover:underline">Sandals &amp; Slides</a>
+                                <a href="all_products.html?filter=Men's%20Nike%20By%20You%20Shoes"
+                                    class="hover:underline">Nike By You</a>
+                            </div>
+                        </div>
+
+                        <!-- SHOP BY SPORT -->
+                        <div>
+                            <h3 class="font-bold text-lg mb-2">Shop By Sport</h3>
+                            <div class="flex flex-col gap-1 text-gray-700">
+                                <a href="all_products.html?filter=Men's%20Running" class="hover:underline">Running</a>
+                                <a href="all_products.html?filter=Men's%20Basketball"
+                                    class="hover:underline">Basketball</a>
+                                <a href="all_products.html?filter=Men's%20Football" class="hover:underline">Football</a>
+                                <a href="all_products.html?filter=Men's%20Golf" class="hover:underline">Golf</a>
+                                <a href="all_products.html?filter=Men's%20Tennis%20&amp;%20Pickleball"
+                                    class="hover:underline">Tennis &amp; Pickleball</a>
+                                <a href="all_products.html?filter=Men's%20Training%20&amp;%20Gym"
+                                    class="hover:underline">Gym and Training</a>
+                                <a href="all_products.html?filter=Men's%20Yoga" class="hover:underline">Yoga</a>
+                                <a href="all_products.html?filter=Men's%20Skateboarding"
+                                    class="hover:underline">Skateboarding</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- WOMEN MENU -->
+                <div class="relative group">
+
+                    <!-- Main Button -->
+                    <a href="women.html" class="font-bold hover:underline">
+                        Women
+                    </a>
+
+                    <!-- DROPDOWN -->
+                    <div class="absolute left-0 top-full hidden group-hover:grid bg-white p-6 dropdown-shadow z-50
+                grid-flow-col auto-cols-max gap-12 w-max">
+
+
+                        <!-- 1. FEATURED -->
+                        <div>
+                            <h3 class="font-bold text-lg mb-2">Featured</h3>
+                            <div class="flex flex-col gap-1 text-gray-700">
+
+                                <a href="all_products.html?filter=New%20Women's" class="hover:underline">
+                                    New Arrivals
+                                </a>
+
+                                <a href="all_products.html?filter=Women's%20bestsellers" class="hover:underline">
+                                    Bestseller
+                                </a>
+
+                                <a href="all_products.html?filter=Women's%20Sale" class="hover:underline">
+                                    Shop All Sale
+                                </a>
+
+                            </div>
+                        </div>
+
+                        <!-- 2. SHOES -->
+                        <div>
+                            <a href="all_products.html?filter=Women's%20Shoes"
+                                class="font-bold text-lg mb-2 hover:underline">
+                                Shoes
+                            </a>
+
+                            <div class="flex flex-col gap-1 text-gray-700">
+                                <a href="all_products.html?filter=Women's%20Shoes" class="hover:underline">All Shoes</a>
+                                <a href="all_products.html?filter=Women's%20Lifestyle%20Shoes"
+                                    class="hover:underline">Lifestyle</a>
+                                <a href="all_products.html?filter=Women's%20Jordan%20Shoes"
+                                    class="hover:underline">Jordan</a>
+                                <a href="all_products.html?filter=Women's%20Running%20Shoes"
+                                    class="hover:underline">Running</a>
+                                <a href="all_products.html?filter=Women's%20Football%20Shoes"
+                                    class="hover:underline">Football</a>
+                                <a href="all_products.html?filter=Women's%20Basketball%20Shoes"
+                                    class="hover:underline">Basketball</a>
+                                <a href="all_products.html?filter=Women's%20Gym%20&amp;%20Training%20Shoes"
+                                    class="hover:underline">Gym &amp; Training</a>
+                                <a href="all_products.html?filter=Women's%20Tennis%20Shoes"
+                                    class="hover:underline">Tennis</a>
+                                <a href="all_products.html?filter=Women's%20Sandals%20&amp;%20Slides"
+                                    class="hover:underline">Sandals &amp; Slides</a>
+                                <a href="all_products.html?filter=Women's%20Sandlas%20&amp;%20Slides"
+                                    class="hover:underline">Nike By You</a>
+                            </div>
+                        </div>
+
+                        <!-- 4. SHOP BY SPORT -->
+                        <div>
+                            <h3 class="font-bold text-lg mb-2">Shop By Sport</h3>
+
+                            <div class="flex flex-col gap-1 text-gray-700">
+                                <a href="all_products.html?filter=Women's%20Running" class="hover:underline">Running</a>
+                                <a href="all_products.html?filter=Women's%20Basketball"
+                                    class="hover:underline">Basketball</a>
+                                <a href="all_products.html?filter=Women's%20Football"
+                                    class="hover:underline">Football</a>
+                                <a href="all_products.html?filter=Women's%20Golf" class="hover:underline">Golf</a>
+                                <a href="all_products.html?filter=Women's%20Tennis%20&amp;%20Pickleball"
+                                    class="hover:underline">Tennis &amp; Pickleball</a>
+                                <a href="all_products.html?filter=Women's%20Gym%20&amp;%20Training"
+                                    class="hover:underline">Gym and Training</a>
+                                <a href="all_products.html?filter=Women's%20Yoga" class="hover:underline">Yoga</a>
+                                <a href="all_products.html?filter=Women's%20Skate"
+                                    class="hover:underline">Skateboarding</a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- KIDS MENU -->
+                <div class="relative group">
+                    <a href="kids.html" class="font-bold hover:underline">Kids</a>
+
+                    <!-- DROPDOWN -->
+                    <div class="absolute left-0 top-full hidden group-hover:grid bg-white p-6 dropdown-shadow z-50
+                grid-flow-col auto-cols-max gap-12 w-max">
+
+
+                        <!-- 1. FEATURED -->
+                        <div>
+                            <h3 class="font-bold text-lg mb-2">Featured</h3>
+                            <div class="flex flex-col gap-1 text-gray-700">
+                                <a href="all_products.html?filter=New Kids" class="hover:underline">New Arrivals</a>
+                                <a href="all_products.html?filter=Kids Bestseller"
+                                    class="hover:underline">Bestseller</a>
+                                <a href="all_products.html?filter=Back to School" class="hover:underline">Back to
+                                    School</a>
+                                <a href="all_products.html?filter=Fitness Gear" class="hover:underline">Sport Gear</a>
+                                <a href="all_products.html?filter=Kids Lifestyle" class="hover:underline">Lifestyle
+                                    Looks</a>
+                            </div>
+                        </div>
+
+                        <!-- 2. SHOES -->
+                        <div>
+                            <h3 class="font-bold text-lg mb-2">Shoes</h3>
+                            <div class="flex flex-col gap-1 text-gray-700">
+                                <a href="all_products.html?filter=Kids Shoes" class="hover:underline">All Shoes</a>
+                                <a href="all_products.html?filter=Kids Lifestyle Shoes"
+                                    class="hover:underline">Lifestyle</a>
+                                <a href="all_products.html?filter=Jordan Shoes for Kids"
+                                    class="hover:underline">Jordan</a>
+                                <a href="all_products.html?filter=Kids Running Shoes"
+                                    class="hover:underline">Running</a>
+                                <a href="all_products.html?filter=Kids Football Shoes"
+                                    class="hover:underline">Football</a>
+                                <a href="all_products.html?filter=Kids Basketball Shoes"
+                                    class="hover:underline">Basketball</a>
+                            </div>
+                        </div>
+
+                        <!-- 4. SHOP BY SPORT -->
+                        <div>
+                            <h3 class="font-bold text-lg mb-2">Shop By Sport</h3>
+                            <div class="flex flex-col gap-1 text-gray-700">
+                                <a href="all_products.html?filter=Kids Running" class="hover:underline">Running</a>
+                                <a href="all_products.html?filter=Kids Basketball"
+                                    class="hover:underline">Basketball</a>
+                                <a href="all_products.html?filter=Kids Football" class="hover:underline">Football</a>
+                                <a href="all_products.html?filter=Kids Training &amp; Gym" class="hover:underline">Gym
+                                    and
+                                    Training</a>
+                            </div>
+                        </div>
+
+                        <!-- 6. KIDS BY AGE -->
+                        <div>
+                            <h3 class="font-bold text-lg mb-2">Kids By Age</h3>
+                            <div class="flex flex-col gap-1 text-gray-700">
+                                <a href="all_products.html?filter=Older Kids" class="hover:underline">Older Kids (7 - 14
+                                    Years)</a>
+                                <a href="all_products.html?filter=Younger Kids" class="hover:underline">Younger Kids (4
+                                    - 7 Years)</a>
+                                <a href="all_products.html?filter=Babies &amp; Toddlers" class="hover:underline">Babies
+                                    &amp;
+                                    Toddlers (0 - 4 Years)</a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <!-- OTHER MENU ITEMS -->
+                <a href="#" class="hover:underline">Home</a>
+                <a href="#" class="hover:underline">Shop</a>
+                <a href="#" class="hover:underline">About</a>
+            </nav>
+
+            <!-- RIGHT: Search + Icons -->
+            <div class="flex items-center gap-4">
+
+                <div class="relative">
+                    <input type="text" placeholder="What are you looking for?"
+                        class="border rounded-full px-4 py-2 pl-10 w-64">
+                    <span class="absolute left-3 top-2.5 text-gray-600">🔍</span>
+                </div>
+
+                <button class="text-2xl">🤍</button>
+                <button class="text-2xl">🛒</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Spline Background -->
     <div class="bg-spline">
         <iframe src="https://my.spline.design/boxeshover-ZrkOuhJRUFOiCbMsVEdIHJk0/" frameborder="0" width="100%"
             height="100%" style="border:0;">
         </iframe>
     </div>
 
-    <div class="login-wrapper">
-        <div class="login-box" id="draggable-login">
+    <!-- SECTION 1: FORM -->
+    <section class="section">
+        <div class="register-box">
 
-            <img src="https://upload.wikimedia.org/wikipedia/commons/a/a6/Logo_NIKE.svg"
-                style="width: 60px; margin-bottom: 20px;">
+            <h1 style="font-size: 28px; font-weight: 700; margin-bottom: 6px;">Log in</h1>
+            <p style="color:#555; margin-bottom: 26px;">Enter your details below</p>
 
-            <h1>Enter your email to join us or sign in.</h1>
+            <div style="width:100%; margin-bottom:22px;">
+                <input type="text" placeholder="Email or Phone Number"
+                    style="width:100%; padding:10px 0; border:none; border-bottom:1px solid #ccc; outline:none; font-size:15px;">
+            </div>
 
-            <p style="margin: 6px 0 10px 0;">
-                <span id="current-country">Indonesia</span>
-                <span id="change-btn">Change</span>
+            <div style="width:100%; margin-bottom:22px;">
+                <input type="password" placeholder="Password"
+                    style="width:100%; padding:10px 0; border:none; border-bottom:1px solid #ccc; outline:none; font-size:15px;">
+            </div>
+
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:25px;">
+                <button style="
+                    background:#e53935;
+                    border:none;
+                    padding:12px 32px;
+                    color:#fff;
+                    border-radius:6px;
+                    font-weight:bold;
+                    cursor:pointer;
+                ">Log In</button>
+
+                <a href="#" style="color:#e53935; font-size:14px; text-decoration:none;">Forget Password?</a>
+            </div>
+
+            <p style="text-align:center; margin-top:10px;">
+                Don’t have an account?
+                <a href="#" style="font-weight:bold;">Create Account</a>
             </p>
 
-            <select name="country" id="country" autocomplete="off">
-                <option value="AF">Afghanistan</option>
-                <option value="AL">Albania</option>
-                <option value="DZ">Algeria</option>
-                <option value="ID" selected>Indonesia</option>
-            </select>
-
-            <label>Email</label>
-            <input id="emailInput" type="email" placeholder="Email" required>
-
-            <p id="error-msg">Please enter a valid email.</p>
-
-            <button id="continueBtn" class="btn">Continue</button>
         </div>
-    </div>
+
+    </section>
+
+    <!-- SECTION 2: FOOTER -->
+    <footer>
+        <div class="footer-container">
+
+            <div class="footer-box">
+                <h3>NikeSignature</h3>
+                <p>Subscribe</p>
+                <p>Get 10% off your first order</p>
+                <div class="footer-input">
+                    <input type="text" placeholder="Enter your email">
+                    <button>➤</button>
+                </div>
+            </div>
+
+            <div class="footer-box">
+                <h3>Support</h3>
+                <p>111 Bijoy sarani, Dhaka,</p>
+                <p>DH 1515, Bangladesh.</p>
+                <p>exclusive@gmail.com</p>
+                <p>+88015-88888-9999</p>
+            </div>
+
+            <div class="footer-box">
+                <h3>Account</h3>
+                <p><a href="#">My Account</a></p>
+                <p><a href="#">Login / Register</a></p>
+                <p><a href="#">Cart</a></p>
+                <p><a href="#">Wishlist</a></p>
+                <p><a href="#">Shop</a></p>
+            </div>
+
+            <div class="footer-box">
+                <h3>Quick Link</h3>
+                <p><a href="#">Privacy Policy</a></p>
+                <p><a href="#">Terms Of Use</a></p>
+                <p><a href="#">FAQ</a></p>
+                <p><a href="#">Contact</a></p>
+            </div>
+
+        </div>
+
+        <div class="copyright">
+            © Copyright Rimel 2022. All rights reserved
+        </div>
+    </footer>
 
     <script>
-        const changeBtn = document.getElementById("change-btn");
-        const select = document.getElementById("country");
-        const current = document.getElementById("current-country");
-
-        const continueBtn = document.getElementById("continueBtn");
-        const emailInput = document.getElementById("emailInput");
-        const errorMsg = document.getElementById("error-msg");
-
-        // Toggle dropdown
-        changeBtn.addEventListener("click", () => {
-            select.style.display = select.style.display === "block" ? "none" : "block";
-        });
-
-        // Update country
-        select.addEventListener("change", () => {
-            current.textContent = select.options[select.selectedIndex].text;
-            select.style.display = "none";
-        });
-
-        // Allowed characters only
-        emailInput.addEventListener("input", () => {
-            emailInput.value = emailInput.value.replace(/[^a-zA-Z0-9@._]/g, "");
-        });
-
-        // Email validation rule
-        function isValidEmail(email) {
-            const regex = /^[A-Za-z0-9._]+@[A-Za-z0-9_]+\.[A-Za-z0-9_]+$/;
-            return regex.test(email);
-        }
-
-        // MAIN LOGIC (shared by Enter + Continue button)
-        function submitEmail() {
-            const email = emailInput.value.trim();
-
-            if (email === "" || !isValidEmail(email)) {
-                errorMsg.style.display = "block";
-                emailInput.value = "";
-                window.location.href = "sign_in.html";
-                return;
-            }
-
-            window.location.href = "register.html";
-        }
-
-        // Click continue
-        continueBtn.addEventListener("click", submitEmail);
-
-        // PRESS ENTER → trigger submitEmail()
-        emailInput.addEventListener("keydown", (e) => {
-            if (e.key === "Enter") {
-                e.preventDefault();
-                submitEmail();
-            }
-        });
-
-        const box = document.getElementById('draggable-login');
+        const box = document.querySelector('.register-box');
         let drag = false;
-        let offsetX, offsetY;
+        let offsetX = 0, offsetY = 0;
 
-        box.addEventListener('mousedown', (e) => {
+        box.addEventListener("mousedown", (e) => {
             drag = true;
             offsetX = e.clientX - box.getBoundingClientRect().left;
             offsetY = e.clientY - box.getBoundingClientRect().top;
-            box.style.cursor = 'grabbing';
+            box.style.cursor = "grabbing";
         });
 
-        document.addEventListener('mousemove', (e) => {
+        document.addEventListener("mousemove", (e) => {
             if (drag) {
                 box.style.left = `${e.clientX - offsetX}px`;
                 box.style.top = `${e.clientY - offsetY}px`;
             }
         });
 
-        document.addEventListener('mouseup', () => {
+        document.addEventListener("mouseup", () => {
             drag = false;
-            box.style.cursor = 'move';
+            box.style.cursor = "move";
         });
-
     </script>
+
+    <script>
+        const iframe = document.querySelector(".bg-spline iframe");
+
+        // Jika mouse berada di area atas (tanpa menabrak form / footer), aktifkan interaksi
+        document.addEventListener("mousemove", (e) => {
+            const box = document.querySelector(".register-box");
+
+            const boxRect = box.getBoundingClientRect();
+            const isHoverForm =
+                e.clientX >= boxRect.left &&
+                e.clientX <= boxRect.right &&
+                e.clientY >= boxRect.top &&
+                e.clientY <= boxRect.bottom;
+
+            // Jika sedang hover form → nonaktifkan interaksi Spline supaya UI bisa diklik
+            if (isHoverForm) {
+                iframe.style.pointerEvents = "none";
+                return;
+            }
+
+            // Selain itu → Spline interaktif
+            iframe.style.pointerEvents = "auto";
+        });
+    </script>
+
 
 
 </body>
