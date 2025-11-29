@@ -9,7 +9,7 @@
 </head>
 
 <body>
-    <div class="w-full bg-black text-white text-sm py-2">
+    <div class="w-full bg-red-500 text-white text-sm py-2">
         <div class="max-w-7xl mx-auto flex justify-between px-4">
             <div></div>
             <div class="flex gap-6">
@@ -368,7 +368,7 @@
 
     <section class="w-full relative">
         <!-- Hero Section -->
-        <div class="relative w-full h-[1000px]">
+        <div class="relative w-full h-[810px]">
             <!-- Spline Animation -->
             <iframe id="splineFrame" src="https://my.spline.design/cursorfollowanimation-Tw168VyPPj3dldVIZ5zxyRJu/"
                 frameborder="0" width="100%" height="100%">
@@ -413,7 +413,7 @@
         });
     </script>
 
-    <section class="w-full px-6 py-12 relative">
+    <section class="w-full px-6 py-12 relative bg-gray-800">
 
         <!-- Tombol Navigasi -->
         <div class="absolute right-6 top-12 flex gap-3 z-20">
@@ -583,105 +583,66 @@
         };
     </script>
 
-
-    <section class="max-w-7xl mx-auto mt-20 px-4 relative">
-
-        <!-- Title + Arrow Buttons -->
-        <div class="flex justify-between items-center mb-6">
-            <h2 class="text-2xl font-bold">Shop Nike x LEGO®</h2>
-
-            <div class="flex items-center gap-2">
-                <button id="btnLeft"
-                    class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center hover:bg-gray-300">
-                    ←
-                </button>
-
-                <button id="btnRight"
-                    class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center hover:bg-gray-300">
-                    →
-                </button>
-            </div>
+    <section class="w-full bg-[#1a1a1a] text-white py-16">
+        <!-- Top Text -->
+        <div class="text-center mb-12">
+            <p class="text-lg font-medium text-gray-300">Clubs & federations</p>
+            <h2 class="text-5xl md:text-6xl font-extrabold mt-2">BEWARE THE BADGE</h2>
         </div>
 
-        <!-- HORIZONTAL SCROLLER -->
-        <div id="legoScroller" class="flex gap-6 overflow-x-auto scroll-smooth pb-4"
-            style="scrollbar-width: none; -ms-overflow-style: none;">
+        <!-- Logo Grid -->
+        <div class="max-w-6xl mx-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-10 text-center">
 
-            <!-- Hide scrollbar for Chrome -->
-            <style>
-                #legoScroller::-webkit-scrollbar {
-                    display: none;
-                }
-            </style>
-
-            <!-- PRODUCT CARD 1 -->
-            <div class="min-w-[350px] bg-white">
-                <img src="../image/giannis-immortality-4-older-basketball-shoes-viEsYyx1.jpeg"
-                    class="w-full rounded-lg">
-                <h3 class="mt-3 text-lg font-semibold">Giannis Immortality 4</h3>
-                <p class="text-gray-600 text-sm">Older kid's Shoes</p>
-                <p class="mt-1 font-medium">Rp 999.000</p>
+            <!-- 1 -->
+            <div>
+                <img src="../image/barca logo.png" class="w-20 mx-auto" alt="FC Barcelona">
+                <p class="mt-3 font-semibold">F.C. Barcelona</p>
             </div>
 
-            <!-- PRODUCT CARD 2 -->
-            <div class="min-w-[350px] bg-white">
-                <img src="../image/ja-3-price-of-admission-ep-basketball-shoes-YZZZJPiv.jpeg" class="w-full rounded-lg">
-                <h3 class="mt-3 text-lg font-semibold">JA 3 'Price of Admission' EP</h3>
-                <p class="text-gray-600 text-sm">Basketball Shoes</p>
-                <p class="mt-1 font-medium">Rp 1.909.000</p>
+            <!-- 2 -->
+            <div>
+                <img src="../image/psg logo.png" class="w-20 mx-auto" alt="PSG">
+                <p class="mt-3 font-semibold">Paris Saint-Germain</p>
             </div>
 
-            <!-- PRODUCT CARD 3 -->
-            <div class="min-w-[350px] bg-white">
-                <img src="../image/ja-3-channel-12-ep-basketball-shoes-YZZZJPiv.jpeg" class="w-full rounded-lg">
-                <h3 class="mt-3 text-lg font-semibold">JA 3 'Channel 12' EP</h3>
-                <p class="text-gray-600 text-sm">Basketball Shoes</p>
-                <p class="mt-1 font-medium">Rp 1.909.000</p>
+            <!-- 3 -->
+            <div>
+                <img src="../image/chelsea.png" class="w-20 mx-auto" alt="Chelsea">
+                <p class="mt-3 font-semibold">Chelsea F.C.</p>
             </div>
 
-            <!-- PRODUCT CARD 4 -->
-            <div class="min-w-[350px] bg-white">
-                <img src="../image/giannis-immortality-4-older-basketball-shoes-viEsYyx1 (1).jpeg"
-                    class="w-full rounded-lg">
-                <h3 class="mt-3 text-lg font-semibold">Giannis Immortality 4</h3>
-                <p class="text-gray-600 text-sm">Older Kid's Basketball Shoes</p>
-                <p class="mt-1 font-medium">Rp 999.000</p>
+            <!-- 4 -->
+            <div>
+                <img src="../image/tottenham.png" class="w-20 mx-auto" alt="Tottenham">
+                <p class="mt-3 font-semibold">Tottenham Hotspur</p>
             </div>
 
-            <!-- PRODUCT CARD 5 -->
-            <div class="min-w-[350px] bg-white">
-                <img src="../image/luka-77-pf-gone-camping-basketball-shoes-MlPLwJ.jpeg" class="w-full rounded-lg">
-                <h3 class="mt-3 text-lg font-semibold">Luka .77 PF 'Gone Camping'</h3>
-                <p class="text-gray-600 text-sm">Basketball Shoes</p>
-                <p class="mt-1 font-medium">Rp 1.549.000</p>
+            <!-- 5 -->
+            <div>
+                <img src="../image/inter millan.png" class="w-20 mx-auto" alt="Inter Milan">
+                <p class="mt-3 font-semibold">Inter Milan</p>
             </div>
 
-            <!-- PRODUCT CARD 6 -->
-            <div class="min-w-[350px] bg-white">
-                <img src="../image/gt-cut-academy-ep-basketball-shoes-NTKpvN.jpeg" class="w-full rounded-lg">
-                <h3 class="mt-3 text-lg font-semibold">Nike G.T. Cut Academy EP</h3>
-                <p class="text-gray-600 text-sm">Basketball Shoes</p>
-                <p class="mt-1 font-medium">Rp 1.399.000</p>
+            <!-- 6 -->
+            <div>
+                <img src="../image/brazil.png" class="w-20 mx-auto" alt="Brazil">
+                <p class="mt-3 font-semibold">Brazil</p>
             </div>
 
-            <!-- PRODUCT CARD 7 -->
-            <div class="min-w-[350px] bg-white">
-                <img src="../image/kobe-viii-older-basketball-shoes-3nD2lQ.jpeg" class="w-full rounded-lg">
-                <h3 class="mt-3 text-lg font-semibold">Kobe VIII</h3>
-                <p class="text-gray-600 text-sm">Older Kids' Basketball Shoes</p>
-                <p class="mt-1 font-medium">Rp 1.659.000</p>
+            <!-- 7 -->
+            <div>
+                <img src="../image/france.png" class="w-20 mx-auto" alt="France">
+                <p class="mt-3 font-semibold">France</p>
             </div>
 
-            <!-- PRODUCT CARD 8 -->
-            <div class="min-w-[350px] bg-white">
-                <img src="../image/precision-7-basketball-shoes-6FvJHX.jpeg" class="w-full rounded-lg">
-                <h3 class="mt-3 text-lg font-semibold">Nike Precision 7</h3>
-                <p class="text-gray-600 text-sm">Men's Basketball Shoes</p>
-                <p class="mt-1 font-medium">Rp 1.069.000</p>
+            <!-- 8 -->
+            <div class="col-span-2 sm:col-span-1 md:col-span-4 lg:col-span-7 flex flex-col items-center mt-6">
+                <img src="../image/netherlands.png" class="w-20 mx-auto" alt="Netherlands">
+                <p class="mt-3 font-semibold">Netherlands</p>
             </div>
-
         </div>
     </section>
+
 
     <footer class="bg-black text-white py-16 px-6">
         <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
