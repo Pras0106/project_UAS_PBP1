@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
-    <title>Basketball</title>
+    <title>Football</title>
 </head>
 
 <body>
@@ -370,15 +370,50 @@
         <!-- Hero Section -->
         <div class="relative w-full h-[1000px]">
             <!-- Spline Animation -->
-            <iframe src="https://my.spline.design/cursorfollowanimation-Tw168VyPPj3dldVIZ5zxyRJu/" frameborder="0"
-                width="100%" height="100%">
+            <iframe id="splineFrame" src="https://my.spline.design/cursorfollowanimation-Tw168VyPPj3dldVIZ5zxyRJu/"
+                frameborder="0" width="100%" height="100%">
             </iframe>
         </div>
     </section>
 
+    <script>
+        const iframe = document.getElementById("splineFrame");
+        let touchStartCount = 0;
+        let scrollTimeout;
+
+        // Handle touchstart event to track the number of touch points (fingers)
+        window.addEventListener("touchstart", (e) => {
+            touchStartCount = e.touches.length;
+            // Only disable pointer events if two fingers are detected (scrolling)
+            if (touchStartCount > 1) {
+                iframe.style.pointerEvents = "none";  // Disable pointer events when two fingers are used (scroll)
+            } else {
+                iframe.style.pointerEvents = "auto";  // Enable pointer events for single-finger touch
+            }
+        });
+
+        // Handle touchmove event to prevent interaction during two-finger scroll
+        window.addEventListener("touchmove", (e) => {
+            if (e.touches.length > 1) {
+                iframe.style.pointerEvents = "none";  // Disable pointer events when scrolling with two fingers
+            } else {
+                iframe.style.pointerEvents = "auto";  // Enable pointer events when using one finger
+            }
+        });
+
+        // Detect mouse scroll (2-finger or wheel event) and disable pointer events
+        window.addEventListener("wheel", (e) => {
+            iframe.style.pointerEvents = "none";  // Disable pointer events during scroll
+            clearTimeout(scrollTimeout);  // Clear previous timeout for re-enable
+
+            // Re-enable pointer events after scroll stops
+            scrollTimeout = setTimeout(() => {
+                iframe.style.pointerEvents = "auto";  // Re-enable pointer events after scroll
+            }, 150);  // Delay in ms (adjust if necessary)
+        });
+    </script>
 
     <section class="w-full px-6 py-12 relative">
-        <h2 class="text-3xl font-bold mb-6">Shop By Athlete</h2>
 
         <!-- Tombol Navigasi -->
         <div class="absolute right-6 top-12 flex gap-3 z-20">
@@ -395,71 +430,159 @@
             style="scrollbar-width: none;">
             <!-- Item 1 -->
             <div class="relative min-w-[400px] md:min-w-[500px] lg:min-w-[550px] snap-start overflow-hidden rounded-xl">
-                <img src="../image/Sabrina Lonesco.jpg" class="w-full h-full object-cover">
+                <img src="../image/wicked speed.jpg" class="w-full h-full object-cover">
                 <div class="absolute bottom-6 left-6 text-white py-2 px-4 rounded-full shadow">
-                    <p class="font-semibold text-lg">Sabrina Lonescu</p>
+                    <p class="font-semibold text-lg">Wicked Speed</p>
                     <div class="mt-2 flex gap-2">
                         <button class="bg-white text-black py-1 px-3 rounded-full">Shop</button>
+                        <button class="bg-white text-black py-1 px-3 rounded-full">Explore</button>
                     </div>
                 </div>
             </div>
 
             <!-- Item 2 -->
             <div class="relative min-w-[400px] md:min-w-[500px] lg:min-w-[550px] snap-start overflow-hidden rounded-xl">
-                <img src="../image/Ja Morant.jpg" class="w-full h-full object-cover">
+                <img src="../image/tiempo.jpg" class="w-full h-full object-cover">
                 <div class="absolute bottom-6 left-6 text-white py-2 px-4 rounded-full shadow">
-                    <p class="font-semibold text-lg">Ja Morant</p>
+                    <p class="font-semibold text-lg">Wicked Touch</p>
                     <div class="mt-2 flex gap-2">
                         <button class="bg-white text-black py-1 px-3 rounded-full">Shop</button>
+                        <button class="bg-white text-black py-1 px-3 rounded-full">Explore</button>
                     </div>
                 </div>
             </div>
 
             <!-- Item 3 -->
             <div class="relative min-w-[400px] md:min-w-[500px] lg:min-w-[550px] snap-start overflow-hidden rounded-xl">
-                <img src="../image/lebron james.jpg" class="w-full h-full object-cover">
+                <img src="../image/phantom.jpg" class="w-full h-full object-cover">
                 <div class="absolute bottom-6 left-6 text-white py-2 px-4 rounded-full shadow">
-                    <p class="font-semibold text-lg">Lebron james</p>
+                    <p class="font-semibold text-lg">Wicked Precision</p>
                     <div class="mt-2 flex gap-2">
                         <button class="bg-white text-black py-1 px-3 rounded-full">Shop</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Item 4 -->
-            <div class="relative min-w-[400px] md:min-w-[500px] lg:min-w-[550px] snap-start overflow-hidden rounded-xl">
-                <img src="../image/kevin durrant.jpg" class="w-full h-full object-cover">
-                <div class="absolute bottom-6 left-6 text-white py-2 px-4 rounded-full shadow">
-                    <p class="font-semibold text-lg">Kevin Durant</p>
-                    <div class="mt-2 flex gap-2">
-                        <button class="bg-white text-black py-1 px-3 rounded-full">Shop</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Item 5 -->
-            <div class="relative min-w-[400px] md:min-w-[500px] lg:min-w-[550px] snap-start overflow-hidden rounded-xl">
-                <img src="../image/Devin Booker.jpg" class="w-full h-full object-cover">
-                <div class="absolute bottom-6 left-6 text-white py-2 px-4 rounded-full shadow">
-                    <p class="font-semibold text-lg">Devin Booker</p>
-                    <div class="mt-2 flex gap-2">
-                        <button class="bg-white text-black py-1 px-3 rounded-full">Shop</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Item 6 -->
-            <div class="relative min-w-[400px] md:min-w-[500px] lg:min-w-[550px] snap-start overflow-hidden rounded-xl">
-                <img src="../image/Giannis Antetokounmpo.jpg" class="w-full h-full object-cover">
-                <div class="absolute bottom-6 left-6 text-white py-2 px-4 rounded-full shadow">
-                    <p class="font-semibold text-lg">Giannis Antetokounmpo</p>
-                    <div class="mt-2 flex gap-2">
-                        <button class="bg-white text-black py-1 px-3 rounded-full">Shop</button>
+                        <button class="bg-white text-black py-1 px-3 rounded-full">Explore</button>
                     </div>
                 </div>
             </div>
         </div>
     </section>
+
+    <section class="w-full relative py-12 bg-gray-900">
+        <!-- Title -->
+        <div class="text-center text-white mb-8">
+            <h2 class="text-4xl font-bold mb-4">UNLOCK YOUR DARK GIFT</h2>
+            <p class="text-xl">Whether it's speed, touch or precision, there's a boot to give your skill a supernatural
+                surge.</p>
+        </div>
+
+        <!-- Scrolling Container -->
+        <div class="relative">
+            <!-- Navigation Arrows -->
+            <div class="absolute top-1/2 left-0 transform -translate-y-1/2 z-20">
+                <button id="scroll-left"
+                    class="w-10 h-10 bg-white rounded-full shadow flex items-center justify-center">
+                    ❮
+                </button>
+            </div>
+            <div class="absolute top-1/2 right-0 transform -translate-y-1/2 z-20">
+                <button id="scroll-right"
+                    class="w-10 h-10 bg-white rounded-full shadow flex items-center justify-center">
+                    ❯
+                </button>
+            </div>
+
+            <!-- Horizontal Scrolling Container -->
+            <div id="scroll-container" class="flex gap-6 overflow-x-auto scroll-smooth pb-4 snap-x snap-mandatory">
+                <!-- Item 1 -->
+                <div
+                    class="relative min-w-[300px] md:min-w-[400px] lg:min-w-[500px] snap-start overflow-hidden rounded-xl">
+                    <img src="../image/mbappe.jpg" class="w-full h-full object-cover" alt="Kylian Mbappe">
+                    <button class="absolute bottom-6 left-6 bg-white text-black py-2 px-4 rounded-full shadow">
+                        Shop Kylian Mbappe
+                    </button>
+                </div>
+
+                <!-- Item 2 -->
+                <div
+                    class="relative min-w-[300px] md:min-w-[400px] lg:min-w-[500px] snap-start overflow-hidden rounded-xl">
+                    <img src="../image/Sham kerr.jpg" class="w-full h-full object-cover" alt="Sam Kerr">
+                    <button class="absolute bottom-6 left-6 bg-white text-black py-2 px-4 rounded-full shadow">
+                        Shop Sam Kerr
+                    </button>
+                </div>
+
+                <!-- Item 3 -->
+                <div
+                    class="relative min-w-[300px] md:min-w-[400px] lg:min-w-[500px] snap-start overflow-hidden rounded-xl">
+                    <img src="../image/erling haland.jpg" class="w-full h-full object-cover" alt="Erling Haaland">
+                    <button class="absolute bottom-6 left-6 bg-white text-black py-2 px-4 rounded-full shadow">
+                        Shop Erling Haaland
+                    </button>
+                </div>
+
+                <!-- Item 4 -->
+                <div
+                    class="relative min-w-[300px] md:min-w-[400px] lg:min-w-[500px] snap-start overflow-hidden rounded-xl">
+                    <img src="../image/salma.jpg" class="w-full h-full object-cover" alt="Erling Haaland">
+                    <button class="absolute bottom-6 left-6 bg-white text-black py-2 px-4 rounded-full shadow">
+                        Shop Salma Paralluelo
+                    </button>
+                </div>
+
+                <!-- Item 5 -->
+                <div
+                    class="relative min-w-[300px] md:min-w-[400px] lg:min-w-[500px] snap-start overflow-hidden rounded-xl">
+                    <img src="../image/vini jr.jpg" class="w-full h-full object-cover" alt="Erling Haaland">
+                    <button class="absolute bottom-6 left-6 bg-white text-black py-2 px-4 rounded-full shadow">
+                        Shop Vini Jr
+                    </button>
+                </div>
+
+                <!-- Item 6 -->
+                <div
+                    class="relative min-w-[300px] md:min-w-[400px] lg:min-w-[500px] snap-start overflow-hidden rounded-xl">
+                    <img src="../image/alexia.jpg" class="w-full h-full object-cover" alt="Erling Haaland">
+                    <button class="absolute bottom-6 left-6 bg-white text-black py-2 px-4 rounded-full shadow">
+                        Shop Alexia Putellas
+                    </button>
+                </div>
+
+                <!-- Item 7 -->
+                <div
+                    class="relative min-w-[300px] md:min-w-[400px] lg:min-w-[500px] snap-start overflow-hidden rounded-xl">
+                    <img src="../image/cole palmer.jpg" class="w-full h-full object-cover" alt="Erling Haaland">
+                    <button class="absolute bottom-6 left-6 bg-white text-black py-2 px-4 rounded-full shadow">
+                        Shop Cole Palmer
+                    </button>
+                </div>
+
+                <!-- Item 8 -->
+                <div
+                    class="relative min-w-[300px] md:min-w-[400px] lg:min-w-[500px] snap-start overflow-hidden rounded-xl">
+                    <img src="../image/kerolin.jpg" class="w-full h-full object-cover" alt="Erling Haaland">
+                    <button class="absolute bottom-6 left-6 bg-white text-black py-2 px-4 rounded-full shadow">
+                        Shop Kerolin
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        const scrollContainer = document.getElementById("scroll-container");
+        const leftButton = document.getElementById("scroll-left");
+        const rightButton = document.getElementById("scroll-right");
+
+        // Scroll Left
+        leftButton.onclick = () => {
+            scrollContainer.scrollBy({ left: -400, behavior: "smooth" });
+        };
+
+        // Scroll Right
+        rightButton.onclick = () => {
+            scrollContainer.scrollBy({ left: 400, behavior: "smooth" });
+        };
+    </script>
+
 
     <section class="max-w-7xl mx-auto mt-20 px-4 relative">
 
@@ -628,7 +751,6 @@
             </p>
         </div>
     </footer>
-
 
     <!-- Script Scroll -->
     <script>
