@@ -15,7 +15,8 @@
 
         <!-- LEFT – IMAGE -->
         <div>
-            <img id="mainImage" src="../image/sb-blazer-low-pro-gt-shoes-ZpVNV6.jpeg" class="bg-gray-100 w-full rounded-xl shadow">
+            <img id="mainImage" src="../image/sb-blazer-low-pro-gt-shoes-ZpVNV6.jpeg"
+                class="bg-gray-100 w-full rounded-xl shadow">
             <div class="flex gap-3 mt-3" id="thumbnailContainer">
                 <!-- Thumbnail auto-filled by JS -->
             </div>
@@ -37,7 +38,7 @@
 
             <!-- SIZE OPTIONS -->
             <p class="mt-4 font-semibold">Select Size</p>
-            <div class="grid grid-cols-6 gap-2 mt-2">
+            <div class="grid grid-cols-6 gap-2 mt-2" id="sizeOptions">
                 <button class="border py-2 rounded hover:bg-gray-100">XS</button>
                 <button class="border py-2 rounded hover:bg-gray-100">S</button>
                 <button class="border py-2 rounded hover:bg-gray-100">M</button>
@@ -48,7 +49,7 @@
             <!-- BUTTONS -->
             <div class="flex gap-4 mt-6">
                 <button class="w-full bg-black text-white py-3 rounded-full font-semibold">Add to Bag</button>
-                <button class="bg-gray-200 border py-3 px-6 rounded-full">Favourite ♡</button>
+                <button id="favBtn" class="bg-gray-200 border py-3 px-6 rounded-full">Favourite ♡</button>
             </div>
 
             <!-- PRODUCT DESCRIPTION -->
@@ -64,7 +65,8 @@
                 <br>
                 <h2 class="font-bold text-lg">Benefits</h2>
                 <ul class="list-disc ml-5 mt-2 text-sm">
-                    <li>Originally designed for performance hoops, the leather upper with tough stitching delivers comfort that lasts.</li>
+                    <li>Originally designed for performance hoops, the leather upper with tough stitching delivers
+                        comfort that lasts.</li>
                     <li>Vulcanised construction fuses the sole to the upper for a flexible, broken-in feel.</li>
                     <li>The solid rubber outsole with herringbone pattern adds durable traction and heritage style.</li>
                     <li>Padded, low-cut collar looks sleek and feels great.</li>
@@ -167,14 +169,14 @@
 
         // RECOMMENDATION PRODUCTS
         const recommendations = [
-            { img: "../image/court-vision-low-next-nature-shoes-N2fFHb.jpeg", name: "Nike Court Vision Low Next Nature", type: "Men's Shoes", price: "Rp 799.000", page: "../product/Nike_Court_Vision_Low_Next_Nature.html" },
+            { img: "../image/NIKE+SB+PS8 (1).png", name: "Nike SB PS8", type: "Men's Shoes", price: "Rp 1.909.000", page: "../product/Nike_SB_PS8.html" },
             { img: "../image/sb-malor-te-shoes-dFgpng.jpeg", name: "Nike SB Malor TE", type: "Men's Shoes", price: "Rp 1.149.000", page: "../product/Nike_SB_Malor_TE.html" },
             { img: "../image/kobe-9-low-basketball-shoes-Up4tSTpB.jpeg", name: "Kobe 9 Low", type: "Basketball Shoes", price: "Rp 2.849.000", page: "../product/Kobe_9_Low.html" },
             { img: "../image/sb-dunk-low-pro-skate-shoes-hTqg2m.jpeg", name: "Nike SB Dunk Low Pro", type: "Skate Shoes", price: "Rp 1.378.000", page: "../product/Nike_SB_Dunk_Low_Pro.html" },
             { img: "../image/sb-janoski-slip-skate-shoes-BxN7w6.jpeg", name: "Nike SB Janoski+ Slip", type: "Skate Shoes", price: "Rp 1.299.000", page: "../product/Nike_SB_Janoski+_Slip.html" },
             { img: "../image/sb-malor-shoes-BZKPwR.jpeg", name: "Nike SB Malor", type: "Men's Shoes", price: "Rp 1.149.000", page: "../product/Nike_SB_Malor.html" },
             { img: "../image/sb-vertebrae-shoes-Zlnwhs.jpeg", name: "Nike SB Vertebrae", type: "Men's Shoes", price: "Rp 1.299.000", page: "../product/Nike_SB_Vertebrae.html" },
-            { img: "../image/juniper-trail-2-gore-tex-waterproof-trail-running-shoes-61f57n.jpeg", name: "Nike Juniper Trail 2 GORE-TEX", type: "Men's Waterproof Trail-Running Shoes", price: "Rp 1.859.000",  page: "../product/Nike_Juniper_Trail_2_GORE-TEX.html" }
+            { img: "../image/juniper-trail-2-gore-tex-waterproof-trail-running-shoes-61f57n.jpeg", name: "Nike Juniper Trail 2 GORE-TEX", type: "Men's Waterproof Trail-Running Shoes", price: "Rp 1.859.000", page: "../product/Nike_Juniper_Trail_2_GORE-TEX.html" }
         ];
 
         const recScroll = document.getElementById("recommendScroll");
@@ -184,7 +186,7 @@
             card.className = "min-w-[250px] border rounded-xl p-3 shadow-sm bg-white";
             card.innerHTML = `
                 <a href="${r.page}">
-                <img src="${r.img}" class="w-full rounded-lg">
+                <img src="${r.img}" class="w-full rounded-lg bg-gray-200">
                 <p class="font-bold mt-2">${r.name}</p>
                 <p class="mt-2">${r.type}</p>
                 <p class="text-gray-600">${r.price}</p>
@@ -200,6 +202,37 @@
         document.getElementById("scrollLeft").onclick = () => {
             recScroll.scrollBy({ left: -300, behavior: "smooth" });
         };
+
+        // FAVOURITE BUTTON TOGGLE
+        const favBtn = document.getElementById("favBtn");
+        let isFav = false;
+
+        favBtn.onclick = () => {
+            isFav = !isFav;
+
+            if (isFav) {
+                favBtn.innerHTML = "Favourite <span style='color:red'>♥</span>";
+            } else {
+                favBtn.innerHTML = "Favourite ♡";
+            }
+        };
+
+        // SIZE BUTTON SELECTOR
+        const sizeButtons = document.querySelectorAll("#sizeOptions button");
+
+        sizeButtons.forEach(btn => {
+            btn.addEventListener("click", () => {
+                // Reset semua tombol
+                sizeButtons.forEach(b => {
+                    b.classList.remove("bg-black", "text-white");
+                });
+
+                // Aktifkan tombol yang dipilih
+                btn.classList.add("bg-black", "text-white");
+            });
+        });
+
+
     </script>
 
 </body>

@@ -37,7 +37,7 @@
 
             <!-- SIZE OPTIONS -->
             <p class="mt-4 font-semibold">Select Size</p>
-            <div class="grid grid-cols-6 gap-2 mt-2">
+            <div class="grid grid-cols-6 gap-2 mt-2" id="sizeOptions">
                 <button class="border py-2 rounded hover:bg-gray-100">XS</button>
                 <button class="border py-2 rounded hover:bg-gray-100">S</button>
                 <button class="border py-2 rounded hover:bg-gray-100">M</button>
@@ -48,7 +48,7 @@
             <!-- BUTTONS -->
             <div class="flex gap-4 mt-6">
                 <button class="w-full bg-black text-white py-3 rounded-full font-semibold">Add to Bag</button>
-                <button class="bg-gray-200 border py-3 px-6 rounded-full">Favourite ♡</button>
+                <button id="favBtn" class="bg-gray-200 border py-3 px-6 rounded-full">Favourite ♡</button>
             </div>
 
             <!-- PRODUCT DESCRIPTION -->
@@ -64,8 +64,10 @@
                 <br>
                 <h2 class="font-bold text-lg">Benefits</h2>
                 <ul class="list-disc ml-5 mt-2 text-sm">
-                    <li>The HART outsole uses less rubber compound than our other XDR rubber technologies—without sacrificing durability and abrasion resistance.</li>
-                    <li>The updated Flyplate creates longevity in the foam and performs like it's fresh out of the box.</li>
+                    <li>The HART outsole uses less rubber compound than our other XDR rubber technologies—without
+                        sacrificing durability and abrasion resistance.</li>
+                    <li>The updated Flyplate creates longevity in the foam and performs like it's fresh out of the box.
+                    </li>
                     <li>Snappy and responsive, Air Zoom cushioning helps provide a quick-off-the-ground sensation.</li>
                 </ul>
             </div>
@@ -183,7 +185,7 @@
             { img: "../image/sb-janoski-slip-skate-shoes-BxN7w6.jpeg", name: "Nike SB Janoski+ Slip", type: "Skate Shoes", price: "Rp 1.299.000", page: "../product/Nike_SB_Janoski+_Slip.html" },
             { img: "../image/sb-malor-shoes-BZKPwR.jpeg", name: "Nike SB Malor", type: "Men's Shoes", price: "Rp 1.149.000", page: "../product/Nike_SB_Malor.html" },
             { img: "../image/sb-vertebrae-shoes-Zlnwhs.jpeg", name: "Nike SB Vertebrae", type: "Men's Shoes", price: "Rp 1.299.000", page: "../product/Nike_SB_Vertebrae.html" },
-            { img: "../image/juniper-trail-2-gore-tex-waterproof-trail-running-shoes-61f57n.jpeg", name: "Nike Juniper Trail 2 GORE-TEX", type: "Men's Waterproof Trail-Running Shoes", price: "Rp 1.859.000",  page: "../product/Nike_Juniper_Trail_2_GORE-TEX.html" }
+            { img: "../image/juniper-trail-2-gore-tex-waterproof-trail-running-shoes-61f57n.jpeg", name: "Nike Juniper Trail 2 GORE-TEX", type: "Men's Waterproof Trail-Running Shoes", price: "Rp 1.859.000", page: "../product/Nike_Juniper_Trail_2_GORE-TEX.html" }
         ];
 
         const recScroll = document.getElementById("recommendScroll");
@@ -209,6 +211,36 @@
         document.getElementById("scrollLeft").onclick = () => {
             recScroll.scrollBy({ left: -300, behavior: "smooth" });
         };
+
+        // FAVOURITE BUTTON TOGGLE
+        const favBtn = document.getElementById("favBtn");
+        let isFav = false;
+
+        favBtn.onclick = () => {
+            isFav = !isFav;
+
+            if (isFav) {
+                favBtn.innerHTML = "Favourite <span style='color:red'>♥</span>";
+            } else {
+                favBtn.innerHTML = "Favourite ♡";
+            }
+        };
+
+        // SIZE BUTTON SELECTOR
+        const sizeButtons = document.querySelectorAll("#sizeOptions button");
+
+        sizeButtons.forEach(btn => {
+            btn.addEventListener("click", () => {
+                // Reset semua tombol
+                sizeButtons.forEach(b => {
+                    b.classList.remove("bg-black", "text-white");
+                });
+
+                // Aktifkan tombol yang dipilih
+                btn.classList.add("bg-black", "text-white");
+            });
+        });
+
     </script>
 
 </body>
