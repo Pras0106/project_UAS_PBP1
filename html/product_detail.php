@@ -41,7 +41,7 @@ $variants_data = [];
 while ($row = $result_variants->fetch_assoc()) {
     // 4b. Ambil ID_PRODUCT_DETAIL untuk digunakan dalam query ukuran selanjutnya
     $detail_id = $row['ID_PRODUCT_DETAIL'];
-    
+
     // 5. QUERY DATA UKURAN (product_size___stock) untuk SETIAP VARIAN
     $sql_sizes_for_variant = "SELECT * FROM product_size___stock WHERE ID_PRODUCT_DETAIL = ?";
     $stmt_sizes_for_variant = $conn->prepare($sql_sizes_for_variant);
@@ -50,10 +50,10 @@ while ($row = $result_variants->fetch_assoc()) {
     $result_sizes_for_variant = $stmt_sizes_for_variant->get_result();
     $sizes_data_for_variant = $result_sizes_for_variant->fetch_assoc();
     $stmt_sizes_for_variant->close();
-    
+
     // Tambahkan data ukuran ke dalam array varian
     $row['size_stock'] = $sizes_data_for_variant ?: [];
-    
+
     $variants_data[] = $row;
 }
 $stmt_variants->close(); // Tutup statement varian utama
@@ -63,7 +63,7 @@ if (empty($variants_data)) {
 }
 
 // Gantikan bagian ini dengan varian pertama dari array baru yang berisi data ukuran
-$default_variant = $variants_data[0]; 
+$default_variant = $variants_data[0];
 
 // 5. QUERY DATA UKURAN (product_size___stock)
 // ... (Kode query ukuran tetap sama) ...
@@ -76,36 +76,79 @@ $result_sizes = $stmt_sizes->get_result();
 $sizes_data = $result_sizes->fetch_assoc();
 $stmt_sizes->close();
 
-// Tutup koneksi
-$conn->close();
-
 
 // 6. PERSIAPAN DATA UNTUK HTML & JAVASCRIPT
 
 // a. Data Ukuran (Buttons)
 // ... (Kode data ukuran tetap sama) ...
 $db_size_columns = [
-    'SIZE_9_1_CM' => '9.1 cm', 'SIZE_9_5_CM' => '9.5 cm', 'SIZE_10_CM' => '10 cm', 'SIZE_10_4_CM' => '10.4 cm',
-    'SIZE_10_8_CM' => '10.8 cm', 'SIZE_11_2_CM' => '11.2 cm', 'SIZE_11_6_CM' => '11.6 cm', 'SIZE_12_CM' => '12 cm',
-    'SIZE_12_5_CM' => '12.5 cm', 'SIZE_13_CM' => '13 cm', 'SIZE_13_3_CM' => '13.3 cm', 'SIZE_14_2_CM' => '14.2 cm',
-    'SIZE_14_6_CM' => '14.6 cm', 'SIZE_15_CM' => '15 cm', 'SIZE_15_5_CM' => '15.5 cm', 'SIZE_15_9_CM' => '15.9 cm',
-    'SIZE_16_3_CM' => '16.3 cm', 'SIZE_16_7_CM' => '16.7 cm', 'SIZE_17_2_CM' => '17.2 cm', 'SIZE_17_6_CM' => '17.6 cm',
-    'SIZE_18_CM' => '18 cm', 'SIZE_18_4_CM' => '18.4 cm', 'SIZE_18_8_CM' => '18.8 cm', 'SIZE_19_3_CM' => '19.3 cm',
-    'SIZE_19_7_CM' => '19.7 cm', 'SIZE_20_1_CM' => '20.1 cm', 'SIZE_20_5_CM' => '20.5 cm', 'SIZE_20_9_CM' => '20.9 cm',
-    'SIZE_21_4_CM' => '21.4 cm', 'SIZE_21_8_CM' => '21.8 cm', 'SIZE_22_2_CM' => '22.2 cm', 'SIZE_22_4_CM' => '22.4 cm',
-    'SIZE_22_7_CM' => '22.7 cm', 'SIZE_23_2_CM' => '23.2 cm', 'SIZE_23_5_CM' => '23.5 cm', 'SIZE_23_8_CM' => '23.8 cm',
-    'SIZE_24_6_CM' => '24.6 cm', 'SIZE_25_CM' => '25 cm', 'SIZE_25_4_CM' => '25.4 cm', 'SIZE_25_8_CM' => '25.8 cm',
-    'SIZE_26_2_CM' => '26.2 cm', 'SIZE_26_7_CM' => '26.7 cm', 
+    'SIZE_9_1_CM' => '9.1 cm',
+    'SIZE_9_5_CM' => '9.5 cm',
+    'SIZE_10_CM' => '10 cm',
+    'SIZE_10_4_CM' => '10.4 cm',
+    'SIZE_10_8_CM' => '10.8 cm',
+    'SIZE_11_2_CM' => '11.2 cm',
+    'SIZE_11_6_CM' => '11.6 cm',
+    'SIZE_12_CM' => '12 cm',
+    'SIZE_12_5_CM' => '12.5 cm',
+    'SIZE_13_CM' => '13 cm',
+    'SIZE_13_3_CM' => '13.3 cm',
+    'SIZE_14_2_CM' => '14.2 cm',
+    'SIZE_14_6_CM' => '14.6 cm',
+    'SIZE_15_CM' => '15 cm',
+    'SIZE_15_5_CM' => '15.5 cm',
+    'SIZE_15_9_CM' => '15.9 cm',
+    'SIZE_16_3_CM' => '16.3 cm',
+    'SIZE_16_7_CM' => '16.7 cm',
+    'SIZE_17_2_CM' => '17.2 cm',
+    'SIZE_17_6_CM' => '17.6 cm',
+    'SIZE_18_CM' => '18 cm',
+    'SIZE_18_4_CM' => '18.4 cm',
+    'SIZE_18_8_CM' => '18.8 cm',
+    'SIZE_19_3_CM' => '19.3 cm',
+    'SIZE_19_7_CM' => '19.7 cm',
+    'SIZE_20_1_CM' => '20.1 cm',
+    'SIZE_20_5_CM' => '20.5 cm',
+    'SIZE_20_9_CM' => '20.9 cm',
+    'SIZE_21_4_CM' => '21.4 cm',
+    'SIZE_21_8_CM' => '21.8 cm',
+    'SIZE_22_2_CM' => '22.2 cm',
+    'SIZE_22_4_CM' => '22.4 cm',
+    'SIZE_22_7_CM' => '22.7 cm',
+    'SIZE_23_2_CM' => '23.2 cm',
+    'SIZE_23_5_CM' => '23.5 cm',
+    'SIZE_23_8_CM' => '23.8 cm',
+    'SIZE_24_6_CM' => '24.6 cm',
+    'SIZE_25_CM' => '25 cm',
+    'SIZE_25_4_CM' => '25.4 cm',
+    'SIZE_25_8_CM' => '25.8 cm',
+    'SIZE_26_2_CM' => '26.2 cm',
+    'SIZE_26_7_CM' => '26.7 cm',
     'SIZE_27_1_CM' => '27.1 cm', // Perbaikan dari IZE_27_1_CM
-    'SIZE_27_5_CM' => '27.5 cm', 'SIZE_27_9_CM' => '27.9 cm', 'SIZE_28_3_CM' => '28.3 cm', 'SIZE_28_8_CM' => '28.8 cm', 
-    'SIZE_29_2_CM' => '29.2 cm', 'SIZE_29_6_CM' => '29.6 cm', 'SIZE_30_CM' => '30 cm', 'SIZE_30_5_CM' => '30.5 cm', 
-    'SIZE_30_9_CM' => '30.9 cm', 'SIZE_31_3_CM' => '31.3 cm', 'SIZE_31_7_CM' => '31.7 cm', 'SIZE_32_2_CM' => '32.2 cm', 
-    'SIZE_32_6_CM' => '32.6 cm', 'SIZE_33_CM' => '33 cm', 'SIZE_33_4_CM' => '33.4 cm', 'SIZE_33_9_CM' => '33.9 cm', 
-    'SIZE_34_3_CM' => '34.3 cm', 
+    'SIZE_27_5_CM' => '27.5 cm',
+    'SIZE_27_9_CM' => '27.9 cm',
+    'SIZE_28_3_CM' => '28.3 cm',
+    'SIZE_28_8_CM' => '28.8 cm',
+    'SIZE_29_2_CM' => '29.2 cm',
+    'SIZE_29_6_CM' => '29.6 cm',
+    'SIZE_30_CM' => '30 cm',
+    'SIZE_30_5_CM' => '30.5 cm',
+    'SIZE_30_9_CM' => '30.9 cm',
+    'SIZE_31_3_CM' => '31.3 cm',
+    'SIZE_31_7_CM' => '31.7 cm',
+    'SIZE_32_2_CM' => '32.2 cm',
+    'SIZE_32_6_CM' => '32.6 cm',
+    'SIZE_33_CM' => '33 cm',
+    'SIZE_33_4_CM' => '33.4 cm',
+    'SIZE_33_9_CM' => '33.9 cm',
+    'SIZE_34_3_CM' => '34.3 cm',
     'SIZE_34_7_CM' => '34.7 cm', // Perbaikan dari SIZE_34_7
-    'SIZE_35_1_CM' => '35.1 cm', 'SIZE_35_5_CM' => '35.5 cm', 
+    'SIZE_35_1_CM' => '35.1 cm',
+    'SIZE_35_5_CM' => '35.5 cm',
     'SIZE_36_0_CM' => '36 cm', // Perubahan nama kolom di input
-    'SIZE_36_4_CM' => '36.4 cm', 'SIZE_36_8_CM' => '36.8 cm', 'SIZE_37_2_CM' => '37.2 cm'
+    'SIZE_36_4_CM' => '36.4 cm',
+    'SIZE_36_8_CM' => '36.8 cm',
+    'SIZE_37_2_CM' => '37.2 cm'
 ];
 
 // Ganti logika pembuatan tombol ukuran Awal (default_variant) dengan yang baru:
@@ -152,7 +195,7 @@ foreach ($variants_data as $v) {
     $p_disc = $v['PRODUCT_DISCOUNT'];
 
     $has_discount = ($p_disc > 0) || ($p_orig > $p_after);
-    $display_discount_percent = round($p_disc * 100); 
+    $display_discount_percent = round($p_disc * 100);
 
     // MODIFIKASI BAGIAN INI UNTUK DATA JS
     $js_variants[] = [
@@ -170,7 +213,7 @@ foreach ($variants_data as $v) {
         'style' => htmlspecialchars($v['PRODUCT_STYLE']),
         'origin' => htmlspecialchars($v['PRODUCT_COUNTRY_ORIGIN']),
         'colorPreview' => htmlspecialchars($v['IMAGE_THUMBNAIL_1_PATH_FILE']),
-        
+
         // <<< TAMBAHAN PENTING: Kirim data ukuran ke JS >>>
         'sizes_data' => $v['size_stock']
         // <<< END TAMBAHAN PENTING >>>
@@ -182,10 +225,11 @@ $js_variants_json = json_encode($js_variants, JSON_UNESCAPED_SLASHES);
 // Tutup koneksi di akhir
 $conn->close();
 
-function renderSizeButtons($sizes_data, $db_size_columns, $first_size_selected = true) {
+function renderSizeButtons($sizes_data, $db_size_columns, $first_size_selected = true)
+{
     $html = '';
     $first_size = $first_size_selected;
-    
+
     // Jika data ukuran kosong atau tidak valid, tampilkan tombol default 'EU-40' yang dicoret sebagai contoh
     if (!$sizes_data || empty($sizes_data)) {
         // Contoh tombol yang dicoret (sesuai permintaan gambar)
@@ -193,7 +237,7 @@ function renderSizeButtons($sizes_data, $db_size_columns, $first_size_selected =
         $html .= '<button class="border py-2 rounded text-gray-400 line-through unavailable" disabled>EU-40</button>';
         return $html;
     }
-    
+
     foreach ($db_size_columns as $db_col => $size_display) {
         $stock_value = isset($sizes_data[$db_col]) ? $sizes_data[$db_col] : null;
 
@@ -369,7 +413,7 @@ if ($show_discount) {
         variants.forEach(v => {
             const div = document.createElement("div");
             // Menambahkan border-black untuk varian default
-            const isDefault = v.id === variants[0].id; 
+            const isDefault = v.id === variants[0].id;
             div.className = `bg-gray-200 border p-1 rounded cursor-pointer hover:opacity-70 ${isDefault ? 'border-2 border-black' : ''}`;
             div.innerHTML = `<img src="${v.colorPreview}" class="w-20 h-16 object-cover rounded">`;
             div.onclick = () => updateProduct(v);
@@ -406,7 +450,7 @@ if ($show_discount) {
                 // Tampilkan coretan dan persen
                 elOriginal.innerText = v.original_formatted;
                 elDiscount.innerText = v.discount_formatted;
-                
+
                 elOriginal.classList.remove("hidden");
                 elDiscount.classList.remove("hidden");
                 // Ubah warna harga utama jadi merah (opsional, seperti ecommerce umumnya)
@@ -425,10 +469,10 @@ if ($show_discount) {
             // 4. Rebuild Thumbnails (Kode Thumbnail tetap sama seperti sebelumnya...)
             const thumb = document.getElementById("thumbnailContainer");
             thumb.innerHTML = "";
-            
+
             const mainImageThumb = document.createElement("img");
             mainImageThumb.src = v.image;
-            mainImageThumb.className = "bg-gray-200 w-20 rounded cursor-pointer border-2 border-black"; 
+            mainImageThumb.className = "bg-gray-200 w-20 rounded cursor-pointer border-2 border-black";
             mainImageThumb.onclick = () => document.getElementById("mainImage").src = v.image;
             thumb.appendChild(mainImageThumb);
 
@@ -439,7 +483,7 @@ if ($show_discount) {
                 img.onclick = () => document.getElementById("mainImage").src = t;
                 thumb.appendChild(img);
             });
-            
+
             // 5. Highlight Pilihan Warna
             document.querySelectorAll('#colorOptions > div').forEach((div, index) => {
                 if (variants[index].id === v.id) {
@@ -456,17 +500,153 @@ if ($show_discount) {
         // INIT FIRST COLOR: Panggil updateProduct dengan varian pertama saat load untuk merender ulang thumbnail dan memastikan border di color option serta harga awal yang lengkap.
         // Dengan Perbaikan 2, ini juga memastikan harga dan label diskon yang disembunyikan jika tidak ada diskon.
         updateProduct(variants[0]);
-        
+
+        // ------------------------------------------
+        // FUNGSI KHUSUS UNTUK UKURAN
+        // ------------------------------------------
+
+        // Peta kolom ukuran (dari PHP)
+        const sizeColumnMap = <?php echo $js_size_map_json; ?>;
+
+        /**
+         * Merender ulang tombol ukuran berdasarkan data stok untuk ID_PRODUCT_DETAIL yang baru.
+         * @param {object} sizes_data - Data baris dari product_size___stock untuk varian ini.
+         */
+        function updateSizeOptions(sizes_data) {
+            const sizeContainer = document.getElementById("sizeOptions");
+            let sizeButtonsHtml = '';
+            let firstAvailableSizeFound = false;
+
+            // Jika data ukuran kosong, tampilkan tombol default 'EU-40' yang dicoret
+            if (!sizes_data || Object.keys(sizes_data).length === 0) {
+                sizeButtonsHtml = '<button class="border py-2 rounded text-gray-400 line-through unavailable" disabled>EU-40</button>';
+                sizeContainer.innerHTML = sizeButtonsHtml;
+                return;
+            }
+
+            // Iterasi melalui peta kolom untuk membuat tombol
+            for (const db_col in sizeColumnMap) {
+                if (sizeColumnMap.hasOwnProperty(db_col)) {
+                    const size_display = sizeColumnMap[db_col];
+                    // Mengambil value stock (decimal(3,1))
+                    const stock_value = sizes_data[db_col];
+
+                    const isAvailable = (stock_value !== null && stock_value !== '' && parseFloat(stock_value) > 0);
+
+                    let buttonClass = 'border py-2 rounded';
+                    let buttonContent = size_display;
+                    let isDisabled = false;
+
+                    if (isAvailable) {
+                        // Ukuran tersedia
+                        buttonClass += ' hover:bg-gray-100';
+                        if (!firstAvailableSizeFound) {
+                            // Pilih tombol yang pertama tersedia sebagai default yang dipilih
+                            buttonClass += ' bg-black text-white selected-size';
+                            firstAvailableSizeFound = true;
+                        }
+                    } else {
+                        // Ukuran tidak tersedia (dicoret dan dinonaktifkan)
+                        buttonClass += ' text-gray-400 line-through unavailable';
+                        isDisabled = true;
+                    }
+
+                    sizeButtonsHtml += `<button data-size="${size_display}" class="${buttonClass}" ${isDisabled ? 'disabled' : ''}>${buttonContent}</button>`;
+                }
+            }
+
+            sizeContainer.innerHTML = sizeButtonsHtml;
+
+            // Tambahkan kembali event listener untuk memilih ukuran baru
+            attachSizeButtonListeners();
+        }
+
+
+        /**
+         * Melampirkan event listener klik ke semua tombol ukuran yang baru dirender.
+         */
+        function attachSizeButtonListeners() {
+            const sizeButtons = document.querySelectorAll("#sizeOptions button");
+
+            sizeButtons.forEach(btn => {
+                // Hanya tambahkan listener ke tombol yang TIDAK disabled/unavailable
+                if (!btn.classList.contains('unavailable')) {
+                    btn.addEventListener("click", () => {
+                        // Reset semua tombol yang tidak disabled
+                        document.querySelectorAll("#sizeOptions button:not(.unavailable)").forEach(b => {
+                            b.classList.remove("bg-black", "text-white", "selected-size");
+                        });
+
+                        // Aktifkan tombol yang dipilih
+                        btn.classList.add("bg-black", "text-white", "selected-size");
+                        // TODO: Anda dapat menambahkan logika untuk menyimpan ukuran yang dipilih di sini
+                    });
+                }
+            });
+        }
+
+        // Ganti bagian SIZE BUTTON SELECTOR yang lama di akhir script (Baris ~419) dengan yang baru:
+
+        // Panggil fungsi attachSizeButtonListeners saat halaman dimuat
+        attachSizeButtonListeners();
+
         // ... (Kode untuk RECOMMENDATION PRODUCTS, scroll buttons, dan favourite button tetap sama) ...
-        const recommendations = [
-            { img: "../image/NIKE+SB+PS8 (1).png", name: "Nike SB PS8", type: "Men's Shoes", price: "Rp 1.909.000", page: "../product/Nike_SB_PS8.html" },
-            { img: "../image/sb-blazer-low-pro-gt-shoes-ZpVNV6.jpeg", name: "Nike SB Blazer Low Pro GT", type: "Men's Shoes", price: "Rp 959.000", page: "../product/Nike_SB_Blazer_Low_Pro_GT.html" },
-            { img: "../image/sb-malor-te-shoes-dFgpng.jpeg", name: "Nike SB Malor TE", type: "Men's Shoes", price: "Rp 1.149.000", page: "../product/Nike_SB_Malor_TE.html" },
-            { img: "../image/kobe-9-low-basketball-shoes-Up4tSTpB.jpeg", name: "Kobe 9 Low", type: "Basketball Shoes", price: "Rp 2.849.000", page: "../product/Kobe_9_Low.html" },
-            { img: "../image/sb-dunk-low-pro-skate-shoes-hTqg2m.jpeg", name: "Nike SB Dunk Low Pro", type: "Skate Shoes", price: "Rp 1.378.000", page: "../product/Nike_SB_Dunk_Low_Pro.html" },
-            { img: "../image/sb-janoski-slip-skate-shoes-BxN7w6.jpeg", name: "Nike SB Janoski+ Slip", type: "Skate Shoes", price: "Rp 1.299.000", page: "../product/Nike_SB_Janoski+_Slip.html" },
-            { img: "../image/sb-malor-shoes-BZKPwR.jpeg", name: "Nike SB Malor", type: "Men's Shoes", price: "Rp 1.149.000", page: "../product/Nike_SB_Malor.html" },
-            { img: "../image/juniper-trail-2-gore-tex-waterproof-trail-running-shoes-61f57n.jpeg", name: "Nike Juniper Trail 2 GORE-TEX", type: "Men's Waterproof Trail-Running Shoes", price: "Rp 1.859.000", page: "../product/Nike_Juniper_Trail_2_GORE-TEX.html" }
+        const recommendations = [{
+                img: "../image/NIKE+SB+PS8 (1).png",
+                name: "Nike SB PS8",
+                type: "Men's Shoes",
+                price: "Rp 1.909.000",
+                page: "../product/Nike_SB_PS8.html"
+            },
+            {
+                img: "../image/sb-blazer-low-pro-gt-shoes-ZpVNV6.jpeg",
+                name: "Nike SB Blazer Low Pro GT",
+                type: "Men's Shoes",
+                price: "Rp 959.000",
+                page: "../product/Nike_SB_Blazer_Low_Pro_GT.html"
+            },
+            {
+                img: "../image/sb-malor-te-shoes-dFgpng.jpeg",
+                name: "Nike SB Malor TE",
+                type: "Men's Shoes",
+                price: "Rp 1.149.000",
+                page: "../product/Nike_SB_Malor_TE.html"
+            },
+            {
+                img: "../image/kobe-9-low-basketball-shoes-Up4tSTpB.jpeg",
+                name: "Kobe 9 Low",
+                type: "Basketball Shoes",
+                price: "Rp 2.849.000",
+                page: "../product/Kobe_9_Low.html"
+            },
+            {
+                img: "../image/sb-dunk-low-pro-skate-shoes-hTqg2m.jpeg",
+                name: "Nike SB Dunk Low Pro",
+                type: "Skate Shoes",
+                price: "Rp 1.378.000",
+                page: "../product/Nike_SB_Dunk_Low_Pro.html"
+            },
+            {
+                img: "../image/sb-janoski-slip-skate-shoes-BxN7w6.jpeg",
+                name: "Nike SB Janoski+ Slip",
+                type: "Skate Shoes",
+                price: "Rp 1.299.000",
+                page: "../product/Nike_SB_Janoski+_Slip.html"
+            },
+            {
+                img: "../image/sb-malor-shoes-BZKPwR.jpeg",
+                name: "Nike SB Malor",
+                type: "Men's Shoes",
+                price: "Rp 1.149.000",
+                page: "../product/Nike_SB_Malor.html"
+            },
+            {
+                img: "../image/juniper-trail-2-gore-tex-waterproof-trail-running-shoes-61f57n.jpeg",
+                name: "Nike Juniper Trail 2 GORE-TEX",
+                type: "Men's Waterproof Trail-Running Shoes",
+                price: "Rp 1.859.000",
+                page: "../product/Nike_Juniper_Trail_2_GORE-TEX.html"
+            }
         ];
 
         const recScroll = document.getElementById("recommendScroll");
@@ -487,10 +667,16 @@ if ($show_discount) {
 
         // SCROLL BUTTONS
         document.getElementById("scrollRight").onclick = () => {
-            recScroll.scrollBy({ left: 300, behavior: "smooth" });
+            recScroll.scrollBy({
+                left: 300,
+                behavior: "smooth"
+            });
         };
         document.getElementById("scrollLeft").onclick = () => {
-            recScroll.scrollBy({ left: -300, behavior: "smooth" });
+            recScroll.scrollBy({
+                left: -300,
+                behavior: "smooth"
+            });
         };
 
         // FAVOURITE BUTTON TOGGLE
@@ -521,7 +707,6 @@ if ($show_discount) {
                 btn.classList.add("bg-black", "text-white");
             });
         });
-
     </script>
 
 </body>
