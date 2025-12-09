@@ -65,23 +65,12 @@ if (empty($variants_data)) {
 // Gantikan bagian ini dengan varian pertama dari array baru yang berisi data ukuran
 $default_variant = $variants_data[0];
 
-// 5. QUERY DATA UKURAN (product_size___stock)
-// ... (Kode query ukuran tetap sama) ...
-$default_detail_id = $default_variant['ID_PRODUCT_DETAIL'];
-$sql_sizes = "SELECT * FROM product_size___stock WHERE ID_PRODUCT_DETAIL = ?";
-$stmt_sizes = $conn->prepare($sql_sizes);
-$stmt_sizes->bind_param("i", $default_detail_id);
-$stmt_sizes->execute();
-$result_sizes = $stmt_sizes->get_result();
-$sizes_data = $result_sizes->fetch_assoc();
-$stmt_sizes->close();
-
 
 // 6. PERSIAPAN DATA UNTUK HTML & JAVASCRIPT
 
 // a. Data Ukuran (Buttons)
 // ... (Kode data ukuran tetap sama) ...
-$db_size_columns = [
+$sizeColumnMap = [
     'SIZE_9_1_CM' => '9.1 cm',
     'SIZE_9_5_CM' => '9.5 cm',
     'SIZE_10_CM' => '10 cm',
@@ -124,7 +113,7 @@ $db_size_columns = [
     'SIZE_25_8_CM' => '25.8 cm',
     'SIZE_26_2_CM' => '26.2 cm',
     'SIZE_26_7_CM' => '26.7 cm',
-    'SIZE_27_1_CM' => '27.1 cm', // Perbaikan dari IZE_27_1_CM
+    'SIZE_27_1_CM' => '27.1 cm',
     'SIZE_27_5_CM' => '27.5 cm',
     'SIZE_27_9_CM' => '27.9 cm',
     'SIZE_28_3_CM' => '28.3 cm',
@@ -151,19 +140,8 @@ $db_size_columns = [
     'SIZE_37_2_CM' => '37.2 cm'
 ];
 
-// Ganti logika pembuatan tombol ukuran Awal (default_variant) dengan yang baru:
-$size_buttons_html = renderSizeButtons($default_variant['size_stock'], $db_size_columns);
-$first_size = true;
-if ($sizes_data) {
-    foreach ($db_size_columns as $db_col => $size_display) {
-        // Cek apakah kolom ada dan nilainya tidak kosong (misal: ada stok atau ukurannya tersedia)
-        if (isset($sizes_data[$db_col]) && !empty($sizes_data[$db_col])) {
-            $selected_class = $first_size ? ' bg-black text-white' : '';
-            $size_buttons_html .= '<button class="border py-2 rounded hover:bg-gray-100' . $selected_class . '">' . htmlspecialchars($size_display) . '</button>';
-            $first_size = false;
-        }
-    }
-}
+// Generate tombol ukuran awal menggunakan fungsi renderSizeButtons
+$size_buttons_html = renderSizeButtons($default_variant['size_stock'], $sizeColumnMap);
 
 // b. Product Benefits (List)
 // ... (Kode benefit tetap sama) ...
@@ -184,9 +162,16 @@ $js_variants = [];
 foreach ($variants_data as $v) {
     // Kumpulkan semua path thumbnail...
     $thumbnails = [];
-    if (!empty($v['IMAGE_THUMBNAIL_2_PATHFILE'])) $thumbnails[] = $v['IMAGE_THUMBNAIL_2_PATHFILE'];
-    if (!empty($v['IMAGE_THUMBNAIL_3_PATH_FILE'])) $thumbnails[] = $v['IMAGE_THUMBNAIL_3_PATH_FILE'];
-    if (!empty($v['IMAGE_THUMBNAIL_4_PATH_FILE'])) $thumbnails[] = $v['IMAGE_THUMBNAIL_4_PATH_FILE'];
+
+    // hanya masukkan jika ada
+    if (!empty($v['IMAGE_THUMBNAIL_2_PATHFILE']))
+        $thumbnails[] = $v['IMAGE_THUMBNAIL_2_PATHFILE'];
+
+    if (!empty($v['IMAGE_THUMBNAIL_3_PATH_FILE']))
+        $thumbnails[] = $v['IMAGE_THUMBNAIL_3_PATH_FILE'];
+
+    if (!empty($v['IMAGE_THUMBNAIL_4_PATH_FILE']))
+        $thumbnails[] = $v['IMAGE_THUMBNAIL_4_PATH_FILE'];
 
     // Data Harga & Diskon...
 
@@ -200,23 +185,35 @@ foreach ($variants_data as $v) {
     // MODIFIKASI BAGIAN INI UNTUK DATA JS
     $js_variants[] = [
         'id' => (int)$v['ID_PRODUCT_DETAIL'],
-        // ... (Data visual & harga lainnya)
+
         'image' => htmlspecialchars($v['IMAGE_THUMBNAIL_1_PATH_FILE']),
-        'thumbnails' => $thumbnails,
+        'colorPreview' => htmlspecialchars($v['IMAGE_THUMBNAIL_1_PATH_FILE']),
+
         'has_discount' => $has_discount,
         'price_formatted' => 'Rp ' . number_format($p_after, 0, ',', '.'),
         'original_formatted' => 'Rp ' . number_format($p_orig, 0, ',', '.'),
         'discount_formatted' => $display_discount_percent . '% off',
+
         'label' => html_entity_decode($v['PRODUCT_LABEL']),
         'category' => html_entity_decode($v['PRODUCT_CATEGORY']),
         'colorShown' => htmlspecialchars($v['COLOR_SHOWN']),
         'style' => htmlspecialchars($v['PRODUCT_STYLE']),
         'origin' => htmlspecialchars($v['PRODUCT_COUNTRY_ORIGIN']),
-        'colorPreview' => htmlspecialchars($v['IMAGE_THUMBNAIL_1_PATH_FILE']),
 
-        // <<< TAMBAHAN PENTING: Kirim data ukuran ke JS >>>
-        'sizes_data' => $v['size_stock']
-        // <<< END TAMBAHAN PENTING >>>
+        'sizes' => $v['size_stock'],
+        'sizes_data' => $v['size_stock'], // ini boleh dipakai atau dihapus
+
+        "ID_PRODUCT_DETAIL" => $v["ID_PRODUCT_DETAIL"],
+        "PRODUCT_LABEL" => $v["PRODUCT_LABEL"],
+        "PRODUCT_PRICE" => $v["PRODUCT_PRICE"],
+        "PRODUCT_DISCOUNT" => $v["PRODUCT_DISCOUNT"],
+        "PRICE_AFTER_DISCOUNT" => $v["PRICE_AFTER_DISCOUNT"],
+        "COLOR_SHOWN" => $v["COLOR_SHOWN"],
+        "PRODUCT_STYLE" => $v["PRODUCT_STYLE"],
+        "size_stock" => $v["size_stock"],
+
+        // BAGIAN YANG PALING PENTING
+        "thumbnails" => $thumbnails
     ];
 }
 
@@ -225,38 +222,35 @@ $js_variants_json = json_encode($js_variants, JSON_UNESCAPED_SLASHES);
 // Tutup koneksi di akhir
 $conn->close();
 
-function renderSizeButtons($sizes_data, $db_size_columns, $first_size_selected = true)
+function renderSizeButtons($sizes_data, $sizeColumnMap, $first_size_selected = true)
 {
     $html = '';
     $first_size = $first_size_selected;
 
-    // Jika data ukuran kosong atau tidak valid, tampilkan tombol default 'EU-40' yang dicoret sebagai contoh
     if (!$sizes_data || empty($sizes_data)) {
-        // Contoh tombol yang dicoret (sesuai permintaan gambar)
-        // Kita gunakan class `unavailable` untuk penanda di JS
-        $html .= '<button class="border py-2 rounded text-gray-400 line-through unavailable" disabled>EU-40</button>';
+        $html .= '<button class="border py-2 rounded text-gray-400 line-through unavailable" disabled>No sizes available</button>';
         return $html;
     }
 
-    foreach ($db_size_columns as $db_col => $size_display) {
+    foreach ($sizeColumnMap as $db_col => $size_display) {
         $stock_value = isset($sizes_data[$db_col]) ? $sizes_data[$db_col] : null;
 
-        if ($stock_value !== null && $stock_value !== '' && $stock_value > 0) {
-            // Ukuran tersedia
+        // Cek: jika stock NULL, 0, atau kosong = unavailable
+        if ($stock_value === null || $stock_value === '' || $stock_value == 0) {
+            // Ukuran TIDAK tersedia
+            $html .= '<button data-size="' . htmlspecialchars($size_display) . '" class="border py-2 rounded text-gray-400 line-through unavailable" disabled>' . htmlspecialchars($size_display) . '</button>';
+        } else {
+            // Ukuran TERSEDIA
             $selected_class = $first_size ? ' bg-black text-white selected-size' : '';
             $html .= '<button data-size="' . htmlspecialchars($size_display) . '" class="border py-2 rounded hover:bg-gray-100' . $selected_class . '">' . htmlspecialchars($size_display) . '</button>';
             $first_size = false;
-        } else {
-            // Ukuran tidak tersedia (Value kosong atau 0)
-            // Tampilan: dicoret, text-gray-400, dan disabled
-            $html .= '<button data-size="' . htmlspecialchars($size_display) . '" class="border py-2 rounded text-gray-400 line-through unavailable" disabled>' . htmlspecialchars($size_display) . '</button>';
         }
     }
     return $html;
 }
 
 // Tambahkan definisi fungsi renderSizeButtons_js ke dalam data JS untuk digunakan dalam JS
-$js_size_map_json = json_encode($db_size_columns, JSON_UNESCAPED_SLASHES);
+$js_size_map_json = json_encode($sizeColumnMap, JSON_UNESCAPED_SLASHES);
 
 // d. Inisialisasi Thumbnail Awal (Selain main image)
 // ... (Kode inisialisasi thumbnail tetap sama) ...
@@ -349,9 +343,9 @@ if ($show_discount) {
                     echo $size_buttons_html;
                 } else {
                     // Fallback jika data ukuran tidak ditemukan atau kosong (menggunakan struktur default)
-                    echo '<button class="border py-2 rounded hover:bg-gray-100 bg-black text-white"></button>';
-                    echo '<button class="border py-2 rounded hover:bg-gray-100">S</button>';
-                    echo '<button class="border py-2 rounded hover:bg-gray-100">M</button>';
+                    echo '<button class="border py-2 rounded hover:bg-gray-100"></button>';
+                    echo '<button class="border py-2 rounded hover:bg-gray-100"></button>';
+                    echo '<button class="border py-2 rounded hover:bg-gray-100"></button>';
                     // ... tambahkan button fallback lainnya jika diperlukan
                 }
                 ?>
@@ -385,28 +379,14 @@ if ($show_discount) {
 
     </div>
 
-    <div class="max-w-7xl mx-auto px-6 mt-20">
-        <h2 class="text-2xl font-bold mb-4">You Might Also Like</h2>
-
-        <div class="relative">
-            <button id="scrollLeft"
-                class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white p-3 rounded-full shadow z-10">
-                &lt;
-            </button>
-
-            <div id="recommendScroll" class="flex gap-6 overflow-x-auto scroll-smooth pb-4">
-            </div>
-
-            <button id="scrollRight"
-                class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white p-3 rounded-full shadow z-10">
-                &gt;
-            </button>
-        </div>
-    </div>
-
     <script>
         // Data Varian Produk (dibuat oleh PHP)
         const variants = <?php echo $js_variants_json; ?>;
+        const sizeColumnMap = <?php echo $js_size_map_json; ?>;
+
+        // Elemen UI
+        const colorOptions = document.getElementById("colorOptions");
+        const sizeOptions = document.getElementById("sizeOptions");
 
         // RENDER COLOR OPTIONS
         const colorContainer = document.getElementById("colorOptions");
@@ -416,13 +396,28 @@ if ($show_discount) {
             const isDefault = v.id === variants[0].id;
             div.className = `bg-gray-200 border p-1 rounded cursor-pointer hover:opacity-70 ${isDefault ? 'border-2 border-black' : ''}`;
             div.innerHTML = `<img src="${v.colorPreview}" class="w-20 h-16 object-cover rounded">`;
-            div.onclick = () => updateProduct(v);
+            div.onclick = (e) => updateColorSelection(e.currentTarget, v);
             colorContainer.appendChild(div);
         });
+
+        function updateColorSelection(clickedDiv, v) {
+            // Update product data
+            updateProduct(v);
+
+            // Reset border semua color option
+            document.querySelectorAll("#colorOptions > div").forEach(c => {
+                c.classList.remove("border-2", "border-black");
+            });
+
+            // Tambahkan border ke item yang diklik
+            clickedDiv.classList.add("border-2", "border-black");
+        }
+
 
         // UPDATE PRODUCT WHEN COLOR SELECTED
         function updateProduct(v) {
             document.getElementById("mainImage").src = v.image;
+
 
             // 1. UPDATE LABEL (Kategori)
             const productLabelEl = document.getElementById("productLabel");
@@ -466,47 +461,68 @@ if ($show_discount) {
             document.getElementById("styleCode").innerHTML = "Style: " + v.style;
             document.getElementById("country").innerHTML = "Country/Region of Origin: " + v.origin;
 
-            // 4. Rebuild Thumbnails (Kode Thumbnail tetap sama seperti sebelumnya...)
-            const thumb = document.getElementById("thumbnailContainer");
-            thumb.innerHTML = "";
+            // 4. RENDER ULANG THUMBNAILS
+            renderThumbnailsForVariant(v);
+            attachThumbnailListeners(v.image);
 
-            const mainImageThumb = document.createElement("img");
-            mainImageThumb.src = v.image;
-            mainImageThumb.className = "bg-gray-200 w-20 rounded cursor-pointer border-2 border-black";
-            mainImageThumb.onclick = () => document.getElementById("mainImage").src = v.image;
-            thumb.appendChild(mainImageThumb);
+            updateSizeOptions(v.size_stock);
 
+        }
+
+        function renderThumbnailsForVariant(v) {
+            const thumbContainer = document.getElementById("thumbnailContainer");
+            thumbContainer.innerHTML = ""; // CLEAR
+
+            // Thumbnail utama
+            const mainThumb = document.createElement("img");
+            mainThumb.src = v.image;
+            mainThumb.dataset.fullimage = v.image;
+            mainThumb.className = "product-thumbnail bg-gray-200 w-20 rounded cursor-pointer border hover:opacity-70";
+            thumbContainer.appendChild(mainThumb);
+
+            // Thumbnail tambahan
             v.thumbnails.forEach(t => {
                 const img = document.createElement("img");
                 img.src = t;
-                img.className = "bg-gray-200 w-20 rounded cursor-pointer border hover:opacity-70";
-                img.onclick = () => document.getElementById("mainImage").src = t;
-                thumb.appendChild(img);
+                img.dataset.fullimage = t;
+                img.className = "product-thumbnail bg-gray-200 w-20 rounded cursor-pointer border hover:opacity-70";
+                thumbContainer.appendChild(img);
             });
-
-            // 5. Highlight Pilihan Warna
-            document.querySelectorAll('#colorOptions > div').forEach((div, index) => {
-                if (variants[index].id === v.id) {
-                    div.classList.add('border-2', 'border-black');
-                } else {
-                    div.classList.remove('border-2', 'border-black');
-                }
-            });
-
-            // 6. RENDER ULANG UKURAN (Tambahkan ini)
-            updateSizeOptions(v.sizes_data);
         }
 
-        // INIT FIRST COLOR: Panggil updateProduct dengan varian pertama saat load untuk merender ulang thumbnail dan memastikan border di color option serta harga awal yang lengkap.
-        // Dengan Perbaikan 2, ini juga memastikan harga dan label diskon yang disembunyikan jika tidak ada diskon.
-        updateProduct(variants[0]);
+
+        function attachThumbnailListeners(initialMainImage) {
+            const mainImageEl = document.getElementById("mainImage");
+            const thumbnailButtons = document.querySelectorAll("#thumbnailContainer .product-thumbnail");
+
+            thumbnailButtons.forEach(thumb => {
+                // A. Inisialisasi Border: Beri border pada thumbnail yang sesuai dengan gambar utama.
+                if (thumb.dataset.fullimage === initialMainImage) {
+                    thumb.classList.add('border-2', 'border-black');
+                } else {
+                    // Pastikan yang lain tidak memiliki border-black
+                    thumb.classList.remove('border-2', 'border-black');
+                }
+
+                // B. Listener Klik: Atur gambar utama dan border
+                thumb.onclick = () => {
+                    const newImageSrc = thumb.dataset.fullimage;
+
+                    // 1. Ubah Gambar Utama
+                    mainImageEl.src = newImageSrc;
+
+                    // 2. Hapus Border dari Semua Thumbnail
+                    thumbnailButtons.forEach(b => b.classList.remove('border-2', 'border-black'));
+
+                    // 3. Tambahkan Border ke Thumbnail yang Diklik
+                    thumb.classList.add('border-2', 'border-black');
+                };
+            });
+        }
 
         // ------------------------------------------
         // FUNGSI KHUSUS UNTUK UKURAN
         // ------------------------------------------
-
-        // Peta kolom ukuran (dari PHP)
-        const sizeColumnMap = <?php echo $js_size_map_json; ?>;
 
         /**
          * Merender ulang tombol ukuran berdasarkan data stok untuk ID_PRODUCT_DETAIL yang baru.
@@ -588,6 +604,7 @@ if ($show_discount) {
         // Ganti bagian SIZE BUTTON SELECTOR yang lama di akhir script (Baris ~419) dengan yang baru:
 
         // Panggil fungsi attachSizeButtonListeners saat halaman dimuat
+        updateProduct(variants[0]);
         attachSizeButtonListeners();
 
         // ... (Kode untuk RECOMMENDATION PRODUCTS, scroll buttons, dan favourite button tetap sama) ...
@@ -692,22 +709,8 @@ if ($show_discount) {
                 favBtn.innerHTML = "Favourite ♡";
             }
         };
-
-        // SIZE BUTTON SELECTOR (Sama seperti sebelumnya)
-        const sizeButtons = document.querySelectorAll("#sizeOptions button");
-
-        sizeButtons.forEach(btn => {
-            btn.addEventListener("click", () => {
-                // Reset semua tombol
-                sizeButtons.forEach(b => {
-                    b.classList.remove("bg-black", "text-white");
-                });
-
-                // Aktifkan tombol yang dipilih
-                btn.classList.add("bg-black", "text-white");
-            });
-        });
     </script>
+
 
 </body>
 
