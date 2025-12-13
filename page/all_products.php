@@ -3,7 +3,7 @@
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "nike db"; 
+$dbname = "nike db";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
@@ -45,6 +45,7 @@ $result = $conn->query($sql);
 
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -58,12 +59,15 @@ $result = $conn->query($sql);
             padding: 20px;
         }
 
-        h1 { margin-bottom: 20px; font-weight: bold; }
+        h1 {
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
 
         .product-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 15px; 
+            gap: 15px;
         }
 
         .product-card {
@@ -91,7 +95,8 @@ $result = $conn->query($sql);
 
         .product-info {
             text-align: left;
-            padding: 0 10px; /* Tambahan padding agar teks tidak mepet pinggir */
+            padding: 0 10px;
+            /* Tambahan padding agar teks tidak mepet pinggir */
         }
 
         .label-recycled {
@@ -123,11 +128,26 @@ $result = $conn->query($sql);
             gap: 8px;
         }
 
-        .current-price { color: #111; }
-        .original-price { color: #757575; text-decoration: line-through; }
-        .discount-text { color: #007d48; }
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .current-price {
+            color: #111;
+        }
+
+        .original-price {
+            color: #757575;
+            text-decoration: line-through;
+        }
+
+        .discount-text {
+            color: #007d48;
+        }
     </style>
 </head>
+
 <body>
 
     <h1>All Products</h1>
@@ -135,18 +155,18 @@ $result = $conn->query($sql);
     <div class="product-grid">
         <?php
         if ($result && $result->num_rows > 0) {
-            while($row = $result->fetch_assoc()) {
-                
+            while ($row = $result->fetch_assoc()) {
+
                 // Ambil Data
                 $nama_produk = $row['PRODUCT_NAME'];
                 $kategori = $row['PRODUCT_CATEGORY'];
                 $label = $row['PRODUCT_LABEL'];
                 $gambar_path = $row['IMAGE_THUMBNAIL_1_PATH_FILE'];
-                
+
                 // Formatting Harga
                 $harga_asli_fmt = number_format($row['PRODUCT_PRICE'], 0, ',', '.');
                 $harga_diskon_fmt = number_format($row['PRICE_AFTER_DISCOUNT'], 0, ',', '.');
-                
+
                 // Hitung Persen Diskon
                 $persen_diskon = 0;
                 if ($row['PRODUCT_DISCOUNT'] > 0) {
@@ -156,7 +176,7 @@ $result = $conn->query($sql);
                 // TAMPILKAN HTML
                 echo '<a href="product_detail.php?id=' . htmlspecialchars($row['ID_PRODUCT']) . '">';
                 echo '<div class="product-card">';
-                
+
                 // Gambar
                 echo '<div class="product-image-container">';
                 echo '<img src="' . htmlspecialchars($gambar_path) . '" alt="' . htmlspecialchars($nama_produk) . '" class="product-image">';
@@ -168,7 +188,7 @@ $result = $conn->query($sql);
                 if (!empty($label)) {
                     echo '<span class="label-recycled">' . htmlspecialchars($label) . '</span>';
                 } else {
-                    echo '<div style="height: 20px;"></div>'; 
+                    echo '<div style="height: 20px;"></div>';
                 }
 
                 // Nama & Kategori
@@ -195,11 +215,12 @@ $result = $conn->query($sql);
         } else {
             echo "<p>Tidak ada produk yang ditemukan.</p>";
         }
-        
+
         ?>
     </div>
 
-<?php $conn->close(); ?>
+    <?php $conn->close(); ?>
 
 </body>
+
 </html>

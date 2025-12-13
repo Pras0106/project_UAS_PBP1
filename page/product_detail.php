@@ -1,6 +1,4 @@
 <?php
-// 1. KONEKSI KE DATABASE
-// ... (Bagian koneksi tetap sama) ...
 $servername = "localhost";
 $username = "root";
 $password = "";
@@ -533,9 +531,10 @@ if ($show_discount) {
             let sizeButtonsHtml = '';
             let firstAvailableSizeFound = false;
 
-            // Jika data ukuran kosong, tampilkan tombol default 'EU-40' yang dicoret
+            // Jika data ukuran kosong, tampilkan tombol default '' yang dicoret
             if (!sizes_data || Object.keys(sizes_data).length === 0) {
-                sizeButtonsHtml = '<button class="border py-2 rounded text-gray-400 line-through unavailable" disabled>EU-40</button>';
+                sizeButtonsHtml = '<button class="py-6 px-4 rounded text-center text-black bg-gray-100 unavailable w-full text-lg col-span-full" disabled>Sold Out:<br>This colour is currently unavailable</button>';
+
                 sizeContainer.innerHTML = sizeButtonsHtml;
                 return;
             }

@@ -1,10 +1,64 @@
+<?php
+session_start();
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "nike db";
+
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+if ($conn->connect_error) {
+    die("Koneksi gagal: " . $conn->connect_error);
+}
+
+// Proses form ketika submit
+$message = "";
+$messageType = "";
+
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['register'])) {
+
+    // Generate kode unik
+    do {
+        $confirmationCode = str_pad(random_int(0, 99999999), 8, '0', STR_PAD_LEFT);
+
+        $check = $conn->prepare("SELECT COUNT(*) FROM user WHERE CODE_CONFIRMATION = ?");
+        $check->bind_param("s", $confirmationCode);
+        $check->execute();
+        $check->bind_result($count);
+        $check->fetch();
+        $check->close();
+    } while ($count > 0);
+
+    // Insert hanya CODE_CONFIRMATION saja
+    $stmt = $conn->prepare("INSERT INTO user (CODE_CONFIRMATION) VALUES (?)");
+    $stmt->bind_param("s", $confirmationCode);
+
+    if ($stmt->execute()) {
+
+        $_SESSION['user_id'] = $conn->insert_id;
+        $_SESSION['code'] = $confirmationCode;
+
+        header("Location: ../page/create_account.php");
+        exit;
+    } else {
+        $message = "Error inserting code: " . $stmt->error;
+        $messageType = "error";
+    }
+
+    $stmt->close();
+}
+
+
+$conn->close();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nike Create Account</title>
+    <title>Welcome to Nike Sign-In</title>
     <script src="https://cdn.tailwindcss.com"></script>
 
     <style>
@@ -57,9 +111,9 @@
 
         /* Form Box */
         .register-box {
-            width: 340px;
+            width: 380px;
             background: #fff;
-            padding: 30px;
+            padding: 35px;
             border-radius: 12px;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
             position: absolute;
@@ -126,6 +180,26 @@
 
         .google-icon {
             width: 20px;
+        }
+
+        .alert {
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
         }
 
         /* FOOTER (NOT FIXED) */
@@ -326,7 +400,7 @@
                     <!-- USER ICON (default hidden unless logged in) -->
                     <button id="userIcon"
                         class="hidden w-10 h-10 rounded-full bg-red-500 flex items-center justify-center relative">
-                        <img src="../image/user (1).png" class="w-6 h-6">
+                        <img src="../image/account.png" class="w-6 h-6">
                     </button>
 
                     <!-- DROPDOWN MENU -->
@@ -335,12 +409,12 @@
                         style="background: linear-gradient(135deg, #8B3A3A, #C85C5C); z-index: 9999;">
 
                         <a href="manage-account.html" class="flex items-center gap-3 px-4 py-2 hover:bg-white/10">
-                            <img src="../image/user (1).png" class="w-5">
+                            <img src="../image/account.png" class="w-5">
                             <span>Manage My Account</span>
                         </a>
 
                         <a href="my-orders.html" class="flex items-center gap-3 px-4 py-2 hover:bg-white/10">
-                            <img src="../image/shopping-bag.png" class="w-5">
+                            <img src="../image/online-shopping.png" class="w-5">
                             <span>My Order</span>
                         </a>
 
@@ -418,24 +492,46 @@
     <section class="section">
         <div class="register-box">
 
-            <h1 style="font-size: 24px; margin-bottom: 8px;">Create an account</h1>
-            <p style="color:#666; margin-bottom: 22px;">Enter your details below</p>
+            <!-- Logo Nike & Jordan -->
+            <div style="display: flex; gap: 15px; margin-bottom: 25px;">
+                <img src="../image/nike.png" alt="Nike" style="height: 35px;">
+                <img src="../image/basketball-player.png" alt="Jordan" style="height: 35px;">
+            </div>
 
-            <input type="text" placeholder="Name" class="input-line">
-            <input type="text" placeholder="Email or Phone Number" class="input-line">
-            <input type="password" placeholder="Password" class="input-line">
+            <h1 style="font-size: 28px; margin-bottom: 15px; font-weight: bold;">Enter your email to join us or sign in.</h1>
 
-            <button class="btn-create">Create Account</button>
+            <div style="margin-bottom: 20px; font-size: 14px; color:#666;">
+                <span id="selectedCountry">Indonesia</span>
+                <a href="#" id="changeCountryBtn" style="color:#666; text-decoration: underline; margin-left: 8px;">Change</a>
+            </div>
 
-            <button class="btn-google">
-                <img src="../image/google.png" class="google-icon">
-                <span>Sign up with Google</span>
-            </button>
+            <!-- Country Modal -->
+            <div id="countryModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center;">
+                <div style="background: white; padding: 30px; border-radius: 12px; width: 400px; max-height: 500px; overflow-y: auto;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h2 style="font-size: 20px; font-weight: bold;">Select Your Country</h2>
+                        <button id="closeModal" style="font-size: 24px; background: none; border: none; cursor: pointer;">&times;</button>
+                    </div>
+                    <input type="text" id="searchCountry" placeholder="Search country..." style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 15px;">
+                    <div id="countryList" style="max-height: 300px; overflow-y: auto;"></div>
+                </div>
+            </div>
 
-            <p style="text-align:center; margin-top: 10px;">
-                Already have account?
-                <a href="#" style="font-weight:bold;">Log in</a>
-            </p>
+            <?php if (!empty($message)): ?>
+                <div class="alert alert-<?php echo $messageType; ?>">
+                    <?php echo htmlspecialchars($message); ?>
+                </div>
+            <?php endif; ?>
+
+            <form method="POST" action="">
+                <input type="hidden" name="country" id="countryInput" value="Indonesia">
+                <div style="margin-bottom: 20px;">
+                    <input type="email" name="email" placeholder="Email*" class="input-line" required style="margin-bottom: 5px;">
+                    <p style="color: #8d8d8d; font-size: 12px; margin: 0;">Required</p>
+                </div>
+
+                <button type="submit" name="register" class="btn-create" style="border-radius: 25px;">Continue</button>
+            </form>
 
         </div>
     </section>
@@ -487,18 +583,62 @@
     </footer>
 
     <script>
-        const box = document.querySelector('.register-box');
-        let drag = false;
-        let offsetX = 0, offsetY = 0;
+        // Country List
+        const countries = ["Afghanistan", "Albania", "Algeria", "American Samoa", "Andorra", "Angola", "Anguilla", "Antarctica", "Antigua and Barbuda", "Argentina", "Armenia", "Aruba", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bermuda", "Bhutan", "Bolivia", "Bosnia and Herzegovina", "Botswana", "Brazil", "Brunei", "Bulgaria", "Burkina Faso", "Burundi", "Cambodia", "Cameroon", "Canada", "Cape Verde", "Cayman Islands", "Central African Republic", "Chad", "Chile", "China", "Colombia", "Comoros", "Congo", "Costa Rica", "Croatia", "Cuba", "Cyprus", "Czech Republic", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Ethiopia", "Fiji", "Finland", "France", "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Greece", "Grenada", "Guatemala", "Guinea", "Guinea-Bissau", "Guyana", "Haiti", "Honduras", "Hong Kong", "Hungary", "Iceland", "India", "Indonesia", "Iran", "Iraq", "Ireland", "Israel", "Italy", "Jamaica", "Japan", "Jordan", "Kazakhstan", "Kenya", "Kiribati", "Kuwait", "Kyrgyzstan", "Laos", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libya", "Liechtenstein", "Lithuania", "Luxembourg", "Macau", "Macedonia", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands", "Mauritania", "Mauritius", "Mexico", "Micronesia", "Moldova", "Monaco", "Mongolia", "Montenegro", "Morocco", "Mozambique", "Myanmar", "Namibia", "Nauru", "Nepal", "Netherlands", "New Zealand", "Nicaragua", "Niger", "Nigeria", "North Korea", "Norway", "Oman", "Pakistan", "Palau", "Palestine", "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Poland", "Portugal", "Puerto Rico", "Qatar", "Romania", "Russia", "Rwanda", "Saint Kitts and Nevis", "Saint Lucia", "Saint Vincent", "Samoa", "San Marino", "Sao Tome and Principe", "Saudi Arabia", "Senegal", "Serbia", "Seychelles", "Sierra Leone", "Singapore", "Slovakia", "Slovenia", "Solomon Islands", "Somalia", "South Africa", "South Korea", "South Sudan", "Spain", "Sri Lanka", "Sudan", "Suriname", "Swaziland", "Sweden", "Switzerland", "Syria", "Taiwan", "Tajikistan", "Tanzania", "Thailand", "Timor-Leste", "Togo", "Tonga", "Trinidad and Tobago", "Tunisia", "Turkey", "Turkmenistan", "Tuvalu", "UAE", "Uganda", "Ukraine", "United Kingdom", "United States", "Uruguay", "Uzbekistan", "Vanuatu", "Vatican City", "Venezuela", "Vietnam", "Yemen", "Zambia", "Zimbabwe"];
 
-        box.addEventListener("mousedown", (e) => {
-            drag = true;
-            offsetX = e.clientX - box.getBoundingClientRect().left;
-            offsetY = e.clientY - box.getBoundingClientRect().top;
-            box.style.cursor = "grabbing";
+        const modal = document.getElementById('countryModal');
+        const changeBtn = document.getElementById('changeCountryBtn');
+        const closeBtn = document.getElementById('closeModal');
+        const searchInput = document.getElementById('searchCountry');
+        const countryList = document.getElementById('countryList');
+        const selectedCountry = document.getElementById('selectedCountry');
+        const countryInput = document.getElementById('countryInput');
+
+        function populateCountries(filter = '') {
+            const filtered = countries.filter(c => c.toLowerCase().includes(filter.toLowerCase()));
+            countryList.innerHTML = filtered.map(c => `<div class="country-item" data-country="${c}" style="padding: 12px; cursor: pointer; border-bottom: 1px solid #eee; transition: background 0.2s;">${c}</div>`).join('');
+
+            document.querySelectorAll('.country-item').forEach(item => {
+                item.addEventListener('mouseenter', e => e.target.style.background = '#2196F3');
+                item.addEventListener('mouseleave', e => e.target.style.background = 'white');
+                item.addEventListener('click', e => {
+                    selectedCountry.textContent = e.target.dataset.country;
+                    countryInput.value = e.target.dataset.country;
+                    modal.style.display = 'none';
+                });
+            });
+        }
+
+        changeBtn.addEventListener('click', e => {
+            e.preventDefault();
+            modal.style.display = 'flex';
+            populateCountries();
+            searchInput.value = '';
+            searchInput.focus();
         });
 
-        document.addEventListener("mousemove", (e) => {
+        closeBtn.addEventListener('click', () => modal.style.display = 'none');
+        modal.addEventListener('click', e => {
+            if (e.target === modal) modal.style.display = 'none';
+        });
+        searchInput.addEventListener('input', e => populateCountries(e.target.value));
+
+        // Draggable box
+        const box = document.querySelector('.register-box');
+        let drag = false,
+            offsetX = 0,
+            offsetY = 0;
+
+        box.addEventListener("mousedown", e => {
+            if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'BUTTON' && !e.target.closest('a') && !e.target.closest('#countryModal')) {
+                drag = true;
+                offsetX = e.clientX - box.getBoundingClientRect().left;
+                offsetY = e.clientY - box.getBoundingClientRect().top;
+                box.style.cursor = "grabbing";
+            }
+        });
+
+        document.addEventListener("mousemove", e => {
             if (drag) {
                 box.style.left = `${e.clientX - offsetX}px`;
                 box.style.top = `${e.clientY - offsetY}px`;
@@ -509,33 +649,15 @@
             drag = false;
             box.style.cursor = "move";
         });
-    </script>
 
-    <script>
+        // Spline iframe
         const iframe = document.querySelector(".bg-spline iframe");
-
-        // Jika mouse berada di area atas (tanpa menabrak form / footer), aktifkan interaksi
-        document.addEventListener("mousemove", (e) => {
-            const box = document.querySelector(".register-box");
-
+        document.addEventListener("mousemove", e => {
             const boxRect = box.getBoundingClientRect();
-            const isHoverForm =
-                e.clientX >= boxRect.left &&
-                e.clientX <= boxRect.right &&
-                e.clientY >= boxRect.top &&
-                e.clientY <= boxRect.bottom;
-
-            // Jika sedang hover form → nonaktifkan interaksi Spline supaya UI bisa diklik
-            if (isHoverForm) {
-                iframe.style.pointerEvents = "none";
-                return;
-            }
-
-            // Selain itu → Spline interaktif
-            iframe.style.pointerEvents = "auto";
+            const isHover = e.clientX >= boxRect.left && e.clientX <= boxRect.right && e.clientY >= boxRect.top && e.clientY <= boxRect.bottom;
+            iframe.style.pointerEvents = (isHover || modal.style.display === 'flex') ? "none" : "auto";
         });
     </script>
-
 
 </body>
 

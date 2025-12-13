@@ -402,7 +402,7 @@ CREATE TABLE `product_size___stock` (
   `SIZE_25_8_CM` decimal(3,1) DEFAULT NULL,
   `SIZE_26_2_CM` decimal(3,1) DEFAULT NULL,
   `SIZE_26_7_CM` decimal(3,1) DEFAULT NULL,
-  `IZE_27_1_CM` decimal(3,1) DEFAULT NULL,
+  `SIZE_27_1_CM` decimal(3,1) DEFAULT NULL,
   `SIZE_27_5_CM` decimal(3,1) DEFAULT NULL,
   `SIZE_27_9_CM` decimal(3,1) DEFAULT NULL,
   `SIZE_28_3_CM` decimal(3,1) DEFAULT NULL,
