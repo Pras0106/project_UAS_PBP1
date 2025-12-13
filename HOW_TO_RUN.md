@@ -188,5 +188,3 @@ Jika Anda menemui masalah:
 4. Periksa log error Apache di `C:\xampp\apache\logs\error.log`
 
 ---
-
-**Selamat coding! 🚀**
